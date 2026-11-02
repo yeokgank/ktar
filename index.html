@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KTAR 한국시험평가원</title>
+<meta name="description" content="KTAR 한국시험평가원 – 시험·인증·고객지원 서비스 안내 및 견적 문의">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- 아이콘 스프라이트 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-test" viewBox="0 0 48 48"><path d="M18 6h12M20 6v14L9 38a4 4 0 0 0 3.5 6h23A4 4 0 0 0 39 38L28 20V6M14 32h20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-cert" viewBox="0 0 48 48"><circle cx="24" cy="19" r="13" fill="none" stroke="currentColor" stroke-width="3"/><path d="M18 19l4 4 8-8M16 31l-4 13 12-6 12 6-4-13" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-report" viewBox="0 0 48 48"><path d="M11 5h18l9 9v29H11z M29 5v9h9M17 24h14M17 31h14M17 38h8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-verify" viewBox="0 0 48 48"><path d="M10 5h16l9 9v10M26 5v9h9M10 5v38h12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="33" cy="34" r="7" fill="none" stroke="currentColor" stroke-width="3"/><path d="M38 39l6 6" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 48 48"><path d="M5 12a3 3 0 0 1 3-3h11l5 6h16a3 3 0 0 1 3 3v19a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3z M24 22v13M18 29l6 6 6-6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-notice" viewBox="0 0 48 48"><path d="M6 19v10h8l16 9V10l-16 9zM37 17a9 9 0 0 1 0 14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-map" viewBox="0 0 48 48"><path d="M24 44S9 30 9 19a15 15 0 0 1 30 0c0 11-15 25-15 25z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><circle cx="24" cy="19" r="5" fill="none" stroke="currentColor" stroke-width="3"/></symbol>
+    <symbol id="i-quote" viewBox="0 0 48 48"><path d="M6 8h36v26H22l-9 8v-8H6z M15 18h18M15 25h11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  </defs>
+</svg>
+
+<!-- 상단 공지 바 -->
+<div class="topbar">
+  <div class="topbar__inner">
+    <a href="#" class="topbar__notice"><b>공지</b><span>2026년 하반기 시험·인증 접수 일정 및 수수료 안내</span><time>2026-11-01</time></a>
+    <div class="ctrl" aria-label="슬라이드 제어">
+      <button type="button" data-act="prev" aria-label="이전">&#8249;</button>
+      <button type="button" data-act="toggle" aria-label="일시정지" class="ctrl__toggle">&#10074;&#10074;</button>
+      <button type="button" data-act="next" aria-label="다음">&#8250;</button>
+      <span class="ctrl__count"><b id="cur">1</b> / 3</span>
+    </div>
+  </div>
+</div>
+
+<header class="header" id="header">
+  <div class="header__inner">
+    <a href="#" class="logo"><img class="logo__white" src="images/logo-white.png" alt="KTAR 한국시험평가원"><img class="logo__color" src="images/logo-color.png" alt="" aria-hidden="true"></a>
+    <nav class="gnb" aria-label="주요 메뉴">
+      <ul>
+        <li><a href="#">KTAR 소개</a></li>
+        <li><a href="#">시험</a></li>
+        <li><a href="#">인증</a></li>
+        <li><a href="#">자료실</a></li>
+        <li><a href="#">고객지원</a></li>
+      </ul>
+    </nav>
+    <div class="util">
+      <a href="#inquiry" class="util__quote">견적 문의</a>
+      <button type="button" aria-label="언어"><svg><use href="#i-globe"/></svg></button>
+      <button type="button" aria-label="검색"><svg><use href="#i-search"/></svg></button>
+      <button type="button" aria-label="전체 메뉴"><svg><use href="#i-menu"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ① 메인 비주얼 슬라이드 + ② 주요 서비스 바로가기 -->
+  <section class="visual" aria-roledescription="carousel" aria-label="메인 비주얼">
+    <div class="slides">
+      <article class="slide is-active">
+        <div class="slide__txt">
+          <p class="slide__sub">신뢰할 수 있는 시험·평가의 기준</p>
+          <h1>한국시험평가원</h1>
+          <p class="slide__en">Korea Testing &amp; Assessment Research</p>
+        </div>
+      </article>
+      <article class="slide">
+        <div class="slide__txt">
+          <p class="slide__sub">준비부터 취득 이후까지 원스톱 지원</p>
+          <h2>인증 서비스</h2>
+          <p class="slide__en">Certification Service</p>
+        </div>
+      </article>
+      <article class="slide">
+        <div class="slide__txt">
+          <p class="slide__sub">빠르고 정확한 견적·상담</p>
+          <h2>고객과 함께합니다</h2>
+          <p class="slide__en">Customer Support</p>
+        </div>
+      </article>
+    </div>
+
+    <nav class="quick" aria-label="주요 서비스 바로가기">
+      <ul class="quick__grid">
+        <li><a href="#"><svg><use href="#i-test"/></svg>시험 안내</a></li>
+        <li><a href="#"><svg><use href="#i-cert"/></svg>인증 안내</a></li>
+        <li><a href="#"><svg><use href="#i-report"/></svg>성적서 발급</a></li>
+        <li><a href="#"><svg><use href="#i-verify"/></svg>진위 확인</a></li>
+        <li><a href="#"><svg><use href="#i-folder"/></svg>자료실</a></li>
+        <li><a href="#"><svg><use href="#i-notice"/></svg>공지사항</a></li>
+        <li><a href="#"><svg><use href="#i-map"/></svg>오시는 길</a></li>
+        <li><a href="#inquiry"><svg><use href="#i-quote"/></svg>견적 문의</a></li>
+      </ul>
+    </nav>
+
+    <aside class="float" aria-label="빠른 메뉴">
+      <a href="#inquiry" class="float__a">견적<br>문의</a>
+      <a href="#" class="float__b">QUICK</a>
+    </aside>
+  </section>
+
+  <!-- ③ 회사소개 요약 -->
+  <section class="about">
+    <div class="inner about__inner">
+      <div>
+        <p class="eyebrow">ABOUT KTAR</p>
+        <h2>공정한 시험과 평가로<br>신뢰를 만드는 기관</h2>
+      </div>
+      <div>
+        <p class="about__text">KTAR 한국시험평가원은 전문성과 공정성을 바탕으로 시험·평가 서비스를 제공합니다. 고객의 제품과 서비스가 신뢰받을 수 있도록 정확한 결과와 신속한 대응으로 함께합니다.</p>
+        <a href="#" class="more">회사소개 자세히 보기 <span>→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ④ 견적 문의 폼 -->
+  <section class="inquiry" id="inquiry">
+    <div class="inner inquiry__inner">
+      <div class="inquiry__head">
+        <p class="eyebrow">QUOTE INQUIRY</p>
+        <h2>견적 문의</h2>
+        <p>문의 내용을 남겨주시면<br>담당자가 확인 후 연락드립니다.</p>
+        <p class="inquiry__tel">대표전화 <b>00-0000-0000</b><small>평일 09:00 – 18:00</small></p>
+      </div>
+      <form class="form" action="#" method="post">
+        <div class="form__row">
+          <label>회사(기관)명 <i>*</i><input type="text" name="company" required></label>
+          <label>담당자명 <i>*</i><input type="text" name="name" required></label>
+        </div>
+        <div class="form__row">
+          <label>연락처 <i>*</i><input type="tel" name="tel" placeholder="010-0000-0000" required></label>
+          <label>이메일 <i>*</i><input type="email" name="email" required></label>
+        </div>
+        <label>문의 분야 <i>*</i>
+          <select name="type" required>
+            <option value="">선택해 주세요</option>
+            <option>시험</option><option>인증</option><option>기타</option>
+          </select>
+        </label>
+        <label>문의 내용 <i>*</i><textarea name="message" rows="5" required></textarea></label>
+        <label class="form__agree"><input type="checkbox" required> 개인정보 수집 및 이용에 동의합니다. <a href="#">내용보기</a></label>
+        <button type="submit" class="submit">견적 문의 접수</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="inner">
+    <ul class="footer__links">
+      <li><a href="#"><b>개인정보처리방침</b></a></li>
+      <li><a href="#">이용약관</a></li>
+      <li><a href="#">이메일무단수집거부</a></li>
+      <li><a href="#">오시는 길</a></li>
+    </ul>
+    <div class="footer__body">
+      <img src="images/logo-white.png" alt="KTAR 한국시험평가원" class="footer__logo">
+      <address>
+        <p>주소: 사업장 주소 입력</p>
+        <p>대표전화: 00-0000-0000 · 팩스: 00-0000-0000 · 이메일: info@example.com</p>
+        <p class="footer__copy">© KTAR Korea Testing &amp; Assessment Research. All rights reserved.</p>
+      </address>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

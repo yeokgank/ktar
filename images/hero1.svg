@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#050d22"/><stop offset=".55" stop-color="#0a2250"/><stop offset="1" stop-color="#0d4aa0"/></linearGradient>
+<radialGradient id="g1" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#35a1ee" stop-opacity=".75"/><stop offset="1" stop-color="#35a1ee" stop-opacity="0"/></radialGradient>
+<linearGradient id="ln" x1="0" x2="1"><stop offset="0" stop-color="#35a1ee" stop-opacity="0"/><stop offset=".5" stop-color="#7fd0ff"/><stop offset="1" stop-color="#35a1ee" stop-opacity="0"/></linearGradient>
+<pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse"><path d="M60 0H0V60" fill="none" stroke="#7fb4ff" stroke-opacity=".08"/></pattern>
+</defs>
+<rect width="1920" height="1080" fill="url(#bg)"/><rect width="1920" height="1080" fill="url(#grid)"/>
+<circle cx="1450" cy="430" r="520" fill="url(#g1)"/>
+<g fill="none" stroke="#7fd0ff" stroke-opacity=".5">
+<circle cx="1450" cy="430" r="150"/><circle cx="1450" cy="430" r="230" stroke-opacity=".35"/><circle cx="1450" cy="430" r="320" stroke-opacity=".22"/><circle cx="1450" cy="430" r="430" stroke-opacity=".12"/>
+</g>
+<g stroke="#9fe0ff" stroke-width="3" stroke-linecap="round" opacity=".9">
+<path d="M1450 430 L1450 280M1450 430 L1590 475" /></g>
+<circle cx="1450" cy="430" r="14" fill="#fff"/>
+<g stroke="#bfe6ff" stroke-opacity=".7" stroke-width="2">
+<path d="M1450 280v-26M1450 580v26M1300 430h-26M1600 430h26M1344 324l-18-18M1556 536l18 18M1344 536l-18 18M1556 324l18-18"/></g>
+<path d="M0 820 C200 820 260 700 420 700 S640 900 800 880 S1000 600 1180 640 S1500 900 1920 760" fill="none" stroke="url(#ln)" stroke-width="3"/>
+<path d="M0 860 C200 860 260 760 420 760 S640 930 800 915 S1000 680 1180 710 S1500 920 1920 820" fill="none" stroke="url(#ln)" stroke-width="2" opacity=".5"/>
+<g fill="#9fe0ff" opacity=".8"><circle cx="420" cy="700" r="5"/><circle cx="1180" cy="640" r="5"/><circle cx="800" cy="880" r="5"/></g>
+<g fill="#fff" opacity=".35"><rect x="1560" y="760" width="8" height="60"/><rect x="1580" y="730" width="8" height="90"/><rect x="1600" y="700" width="8" height="120"/><rect x="1620" y="745" width="8" height="75"/><rect x="1640" y="680" width="8" height="140"/></g>
+</svg>
