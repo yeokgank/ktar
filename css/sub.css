@@ -155,3 +155,16 @@ body.sub{padding-top:var(--header-h)}
   .facts{padding:4px 22px}.facts div{grid-template-columns:78px 1fr}
   .faq summary{padding:16px 18px}.faq p{padding:0 18px 18px}
 }
+
+/* 링크 카드 (주요 사업 바로가기) */
+.link-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.link-card{position:relative;display:flex;flex-direction:column;gap:10px;padding:32px 28px 28px;background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;transition:transform .25s var(--ease),box-shadow .25s,border-color .25s}
+.link-card::before{content:"";position:absolute;left:0;top:0;height:4px;width:100%;background:linear-gradient(90deg,var(--sky),var(--blue));transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.link-card:hover,.link-card:focus-visible{transform:translateY(-4px);box-shadow:0 16px 36px rgba(11,33,80,.1);border-color:#c9d8ee}
+.link-card:hover::before,.link-card:focus-visible::before{transform:scaleX(1)}
+.link-card small{color:var(--sky);font-weight:700;letter-spacing:.1em;font-size:13px}
+.link-card h3{font-size:21px;color:var(--navy)}
+.link-card p{color:var(--muted);font-size:15.5px;flex:1}
+.link-card span{margin-top:6px;color:var(--blue);font-weight:700}
+.link-card span::after{content:" →"}
+@media (max-width:1100px){.link-cards{grid-template-columns:1fr}}
