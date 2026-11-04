@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pkill -f \"http.server 8765\")",
+      "Bash(git add *)",
+      "Bash(git commit -q -m 'feat: 시험·인증 서브페이지 5종에 개요·분야 태그·FAQ 블록 추가 *)",
+      "Bash(git push *)"
+    ]
+  }
+}
