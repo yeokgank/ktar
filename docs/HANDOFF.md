@@ -49,6 +49,7 @@ docs/                 메뉴 뎁스 엑셀(v1, v3), 이 문서
 ```
 - 로고 원본 PSD(`ktar_logo(X).psd`, `ktar_logo2(O).psd`)는 `.gitignore`로 제외되어 저장소에 없음. 최초 작업 컴퓨터의 프로젝트 폴더에만 있음. 사이트에는 변환된 PNG를 사용.
 - 서브페이지 7개는 `tools/gen_subpages.py`로 생성함 (`python3 tools/gen_subpages.py .`). **페이지 본문·LNB·메뉴를 바꿀 때는 이 스크립트를 고치고 다시 실행**하면 7개가 함께 갱신됨. 헤더/푸터 원본은 `tools/tpl_head.html`, `tpl_tail.html`.
+- 인증 3종(`cert/gs`·`kc`·`cloud`)은 `tools/gen_cert.py` + `css/cert.css`의 별도 템플릿(히어로+핵심정보 패널, 앵커 탭, 이점, 비교표, 6단계 프로세스, 준비 서류, 문의). 벤치마킹: kocert-renewal-preview 의 gs/kc 구조. 문구는 모두 샘플. 사례 섹션은 가공 사례가 되므로 제외함.
 - 스크립트를 쓰지 않고 HTML을 직접 고치면 다음 실행 때 덮어써지므로 주의. 메인 `index.html`의 GNB는 별도 파일이라 메뉴 변경 시 같이 수정해야 함.
 
 ## 5. 현재 상태
