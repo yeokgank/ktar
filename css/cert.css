@@ -104,17 +104,6 @@
 .docs__col li span{flex:none;color:var(--muted);font-size:14px}
 .docs-note{margin-top:16px;font-size:14px;color:var(--muted)}
 
-/* 사례 (시험 페이지) */
-.cases{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
-.case{display:flex;flex-direction:column;padding:28px 26px;background:#fff;border:1px solid var(--line);border-top:3px solid var(--navy)}
-.case__tags{display:flex;flex-wrap:wrap;gap:6px}
-.case__tags i{font-style:normal;padding:3px 10px;border:1px solid var(--line);background:#f5f8fc;font-size:12.5px;font-weight:700;color:#53627d}
-.case__tags i:first-child{background:var(--navy);border-color:var(--navy);color:#fff}
-.case__num{margin:22px 0 16px;padding-bottom:18px;border-bottom:1px solid var(--line);font-size:34px;font-weight:800;line-height:1.1;color:var(--blue);letter-spacing:-.02em}
-.case__num small{display:block;margin-top:6px;font-size:13.5px;font-weight:500;color:var(--muted);letter-spacing:0}
-.case h3{margin-bottom:10px;font-size:17.5px;line-height:1.5;color:var(--navy);letter-spacing:-.015em}
-.case__desc{font-size:15px;line-height:1.75;color:#44526b}
-
 /* 문의 */
 .contact{background:#0b2150 url(../images/about-bg.svg) center/cover no-repeat;color:#fff;padding:72px 0}
 .contact__inner{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:48px;align-items:center}
@@ -132,12 +121,11 @@
   .ph__inner{grid-template-columns:minmax(0,1fr);gap:36px;padding-bottom:56px}
   .gain{grid-template-columns:repeat(2,minmax(0,1fr))}
   .proc{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .cases{grid-template-columns:repeat(2,minmax(0,1fr))}
   .atab__sw span{display:none}
   .cs{padding:64px 0}
 }
 @media (max-width:768px){
-  .gain,.proc,.docs,.cases{grid-template-columns:minmax(0,1fr)}
+  .gain,.proc,.docs{grid-template-columns:minmax(0,1fr)}
   .atab__inner{flex-direction:column;gap:0}
   .atab__sw{padding:10px 0;border-top:1px solid var(--line);overflow-x:auto}
   .atab nav a{height:48px;padding:0 16px}

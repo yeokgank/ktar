@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """시험 상세 2종(공인시험·일반시험 V&V) 생성기. gen_subpages.py 가 호출한다.
-구성: 히어로+핵심정보 패널 → 앵커 탭 → 활용 상황 → 비교표 → 프로세스 → 준비 서류 → 사례 → 문의.
-인증 3종(gen_cert.py)과 같은 골격·CSS(cert.css)를 쓰고 사례 블록만 추가한다."""
+구성: 히어로+핵심정보 패널 → 앵커 탭 → 활용 상황 → 비교표 → 프로세스 → 준비 서류 → 문의.
+인증 3종(gen_cert.py)과 같은 골격·CSS(cert.css)를 쓴다."""
 import re
 
 import gen_cert
@@ -10,7 +10,7 @@ from gen_cert import HEAD, TAIL, who
 SWITCH = [("공인시험", "certified"), ("일반시험(V&V)", "vv")]
 EXTRA_E = "&amp;"
 
-# 모든 문구·수치·사례는 시안용 샘플 (실제 인정 번호·실적은 확정 후 기재)
+# 모든 문구·수치는 시안용 샘플 (실제 인정 번호·실적은 확정 후 기재)
 STEPS_COMMON = [
     ("견적 확인", "견적문의로 의뢰하시면 시험 가능 여부와 견적을 확인해 안내합니다.", ["KTAR"]),
     ("계약 진행", "견적 확인 후 시험 계약을 체결합니다.", ["의뢰자", "KTAR"]),
@@ -53,15 +53,6 @@ PAGES = {
         docs_you=[("과제 계획서 · 요건 자료", "정량 목표 부분만 가능"), ("시험 대상", "실행 파일 · 접속 정보 · 시료"),
                   ("제품 사양서 · 기능 설명서", "있는 대로"), ("사업자등록증", "신청서 첨부")],
         docs_me=[("시험 신청서", "KTAR 양식"), ("시험 절차서", "상담 후 작성"), ("공식 시험 성적서", "발급")],
-        cases=[(["R&D 과제", "SW 성능"], "5주", "접수에서 성적서 발급까지",
-                "정량 목표 7개를 성적서로 증명하다: 소프트웨어 기업 A사 사례",
-                "과제 계획서의 정량 목표가 시험 가능한 형태가 아니어서 항목을 재정의하고, 1회 시험으로 성적서를 발급했습니다."),
-               (["공공 조달", "기능"], "2회", "보완 없이 제출 완료",
-                "입찰 제출용 기능 성적서를 일정 안에: 솔루션 기업 B사 사례",
-                "제출 기한이 짧아 기능 명세 대조를 사전에 끝내고, 접수 후 2주 만에 성적서를 전달했습니다."),
-               (["데이터", "AI"], "3종", "분야별 성적서 확보",
-                "AI 정확도와 데이터 품질을 나눠 시험하다: 영상 분석 기업 C사 사례",
-                "성능과 데이터 항목을 분리해 설계하고, 과제 종료 전에 필요한 성적서를 모두 확보했습니다.")],
         cta_title="계획서의 시험 항목만 보내주시면<br>영업일 3일 내 가능 여부와 견적을 안내합니다",
         cta_lead="협약서 발췌본이면 충분합니다. 시험 가능 여부, 견적, 성적서 발급 예정일을 항목별로 정리해 드립니다.",
     ),
@@ -100,21 +91,12 @@ PAGES = {
         docs_you=[("시험 항목 · 요건 자료", "형식 무관"), ("시험 대상", "실행 파일 · 접속 정보 · 시료"),
                   ("제품 사양서 · 사용자 설명서", "있는 대로"), ("사업자등록증", "신청서 첨부")],
         docs_me=[("시험 신청서", "KTAR 양식"), ("시험 절차서", "항목 · 방법 · 판정 기준"), ("시험 결과 보고서", "발급")],
-        cases=[(["일반시험", "의뢰자 제시 항목"], "2주", "항목 설계에서 결과서까지",
-                "발주처 성능 요건을 그대로 항목화하다: 설비 제조 D사 납품 검수 사례",
-                "공식 규격 밖의 항목이라 의뢰자가 제시한 방법으로 시험하고, 검수 조건을 그대로 반영해 재시험 없이 통과했습니다."),
-               (["사전 시험", "SW"], "1회", "결함 사전 발견",
-                "인증 접수 전에 먼저 걸러내다: 서비스 기업 E사 사례",
-                "접수 전 기능·성능을 점검해 주요 결함을 미리 수정하고, 본 시험 비용과 일정을 줄였습니다."),
-               (["성능", "부하"], "3일", "회신까지 걸린 시간",
-                "출시 직전 동시접속 부하를 확인하다: 플랫폼 기업 F사 사례",
-                "시험 가능 여부와 견적을 3일 안에 회신하고, 시나리오 기반 부하 시험으로 병목 구간을 찾아 전달했습니다.")],
         cta_title="시험하고 싶은 항목만 적어 보내주시면<br>영업일 3일 내 가능 여부와 견적을 안내합니다",
         cta_lead="규격서나 계획서 일부, 메일 본문으로도 충분합니다. 시험 가능 여부, 견적, 결과서 발급 예정일을 함께 회신합니다.",
     ),
 }
 
-ANCHORS = [("gain", "활용 상황"), ("cmp", "비교"), ("proc", "프로세스"), ("docs", "준비 서류"), ("cases", "사례"), ("contact", "견적문의")]
+ANCHORS = [("gain", "활용 상황"), ("cmp", "비교"), ("proc", "프로세스"), ("docs", "준비 서류"), ("contact", "견적문의")]
 
 
 def esc(s):
@@ -142,16 +124,6 @@ def cmp_table(d):
             cells += f'<td class="{"rec" if n == d["cmp_rec"] else ""}">{esc(c)}</td>'
         rows += f"<tr>{cells}</tr>"
     return f'<div class="cmp-wrap"><table class="cmp"><thead><tr>{heads}</tr></thead><tbody>{rows}</tbody></table></div>'
-
-
-def case_cards(d):
-    out = ""
-    for tags, num, cap, title, desc in d["cases"]:
-        chips = "".join(f"<i>{esc(t)}</i>" for t in tags)
-        out += (f'<article class="case"><div class="case__tags">{chips}</div>'
-                f'<p class="case__num">{esc(num)}<small>{esc(cap)}</small></p>'
-                f'<h3>{esc(title)}</h3><p class="case__desc">{esc(desc)}</p></article>')
-    return out
 
 
 def build(slug, repo):
@@ -234,13 +206,6 @@ def build(slug, repo):
     </div>
   </section>
 
-  <section class="cs" id="cases">
-    <div class="inner">
-      <div class="kh"><p class="kh__label">CASE</p><h2>{t} 진행 사례</h2></div>
-      <div class="cases">{case_cards(d)}</div>
-    </div>
-  </section>
-
   <section class="contact" id="contact">
     <div class="inner contact__inner">
       <div>
@@ -255,7 +220,7 @@ def build(slug, repo):
     </div>
   </section>
 
-  <div class="sample-wrap"><div class="inner"><p class="sample-note">※ 본 페이지의 문구·수치·사례는 시안용 샘플입니다. 실제 내용 확정 후 교체됩니다.</p></div></div>
+  <div class="sample-wrap"><div class="inner"><p class="sample-note">※ 본 페이지의 문구·수치는 시안용 샘플입니다. 실제 내용 확정 후 교체됩니다.</p></div></div>
 </main>'''
     path = f"{repo}/test/{slug}.html"
     with open(path, "w", encoding="utf-8") as f:
