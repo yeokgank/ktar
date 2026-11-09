@@ -258,9 +258,11 @@ def build(key, g_key, page_no):
 
 
 import gen_cert  # 인증 3종은 별도 템플릿(히어로+앵커 탭 구조)
+import gen_test  # 시험 2종도 같은 골격 (+사례 블록)
 for g, (_, _, items) in GROUPS.items():
     for _, slug in items:
-        if g == "cert":
+        if g in ("cert", "test"):
             continue
         print("wrote", build(f"{g}/{slug}", g, 0))
 gen_cert.build_all(REPO)
+gen_test.build_all(REPO)
