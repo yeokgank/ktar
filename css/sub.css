@@ -65,7 +65,7 @@ body.sub{padding-top:var(--header-h)}
 .ask{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px 32px;border:1px solid var(--line);border-left:4px solid var(--blue);background:#fff}
 .ask b{display:block;font-size:18px;color:var(--navy);margin-bottom:2px}
 .ask span{color:var(--muted);font-size:15px}
-.ask a{flex:none;padding:13px 28px;background:var(--navy);color:#fff;font-weight:700;border-radius:2px;transition:background .15s}
+.ask a{flex:none;padding:13px 28px;background:var(--navy);color:#fff;font-weight:700;border-radius:10px;transition:background .15s}
 .ask a:hover{background:var(--blue)}
 
 /* 사진 자리 */

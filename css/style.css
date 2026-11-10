@@ -44,7 +44,7 @@ svg{display:block}
 .util button{width:40px;height:40px;display:grid;place-items:center;border-radius:50%;transition:background .2s}
 .util button:hover{background:rgba(255,255,255,.16)}
 .util svg{width:22px;height:22px}
-.util__quote{margin-right:10px;padding:9px 20px;border-radius:2px;background:#fff;color:var(--navy);font-weight:700;font-size:14px;transition:background .2s,color .2s}
+.util__quote{margin-right:10px;padding:9px 20px;border-radius:10px;background:#fff;color:var(--navy);font-weight:700;font-size:14px;transition:background .2s,color .2s}
 .util__quote:hover{background:var(--sky);color:#fff}
 /* sticky solid state */
 .header.is-solid{position:fixed;top:0;background:#fff;color:var(--text);box-shadow:0 2px 16px rgba(11,33,80,.12)}
@@ -107,7 +107,7 @@ svg{display:block}
 .about h2{font-size:clamp(30px,3.4vw,44px);line-height:1.35;font-weight:800;letter-spacing:-.03em;color:var(--navy);margin-bottom:28px;word-break:keep-all}
 .about h2 em{font-style:normal;color:var(--blue)}
 .about__text{font-size:17.5px;line-height:1.9;color:#44526b;margin-bottom:36px;word-break:keep-all}
-.more{display:inline-flex;align-items:center;gap:14px;padding:15px 28px;background:var(--navy);color:#fff;border-radius:2px;font-weight:700;transition:background .2s}
+.more{display:inline-flex;align-items:center;gap:14px;padding:15px 28px;background:var(--navy);color:#fff;border-radius:10px;font-weight:700;transition:background .2s}
 .more span{transition:transform .25s var(--ease)}
 .more:hover{background:var(--blue)}
 .more:hover span{transform:translateX(5px)}
@@ -130,12 +130,12 @@ svg{display:block}
 .form label{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 4px;font-weight:700;font-size:14px}
 .form label>input,.form label>select,.form label>textarea{flex:0 0 100%}
 .form label i{color:#d93025;font-style:normal}
-.form input[type=text],.form input[type=tel],.form input[type=email],.form select,.form textarea{width:100%;padding:14px 16px;border:1px solid #cdd6e4;border-radius:0;font:inherit;font-weight:400;background:#fafcff;transition:border-color .2s,box-shadow .2s}
+.form input[type=text],.form input[type=tel],.form input[type=email],.form select,.form textarea{width:100%;padding:14px 16px;border:1px solid #cdd6e4;border-radius:8px;font:inherit;font-weight:400;background:#fafcff;transition:border-color .2s,box-shadow .2s}
 .form input:focus,.form select:focus,.form textarea:focus{outline:0;border-color:var(--sky);box-shadow:0 0 0 3px rgba(53,161,238,.2);background:#fff}
 .form textarea{resize:vertical}
 .form__agree{display:flex!important;align-items:center;gap:8px;font-weight:400!important;color:var(--muted)}
 .form__agree a{text-decoration:underline;color:var(--blue)}
-.submit{padding:18px;border-radius:2px;background:var(--navy);color:#fff;font-weight:800;font-size:17px;transition:background .2s}
+.submit{padding:18px;border-radius:10px;background:var(--navy);color:#fff;font-weight:800;font-size:17px;transition:background .2s}
 .submit:hover{background:var(--blue)}
 
 /* footer */
