@@ -158,7 +158,7 @@ def build(slug, repo):
           <a class="btn btn--line" href="#proc">발급 프로세스 보기</a>
         </div>
       </div>
-      <aside class="fact" aria-label="{t} 핵심 정보">
+      <aside class="fact fact--glass" aria-label="{t} 핵심 정보">
         <div class="fact__head">{t} 한눈에 보기<small>KTAR</small></div>
         <dl>{facts}</dl>
       </aside>
