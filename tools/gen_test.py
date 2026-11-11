@@ -57,7 +57,7 @@ PAGES = {
     ),
     "vv": dict(
         title="일반시험(V&V)",
-        lead="정량적 목표 항목도 의뢰자가 제시한 방법으로 시험합니다. 개발 단계 어디서든 의뢰할 수 있고, 회신이 빠릅니다.",
+        lead="",
         h1="규격에 없는 항목도,<br><em>의뢰자 제시 방법</em>에 맞춰 시험합니다",
         desc="고객 요구에 맞춰 시험 항목과 방법을 설계하고 시험 결과 보고서를 발급합니다.",
         facts=[("대상", "소프트웨어 · ICT 제품 · 데이터 · 정보시스템 전 분야"),
@@ -127,7 +127,8 @@ def cmp_table(d):
 def build(slug, repo):
     d = PAGES[slug]
     t = esc(d["title"])
-    facts = "".join(f"<div><dt>{k}</dt><dd>{esc(v)}</dd></div>" for k, v in d["facts"])
+    lead_html = f'<p class="ph__lead">{esc(d["lead"])}</p>' if d["lead"] else ""
+    facts ="".join(f"<div><dt>{k}</dt><dd>{esc(v)}</dd></div>" for k, v in d["facts"])
     tabs = "".join(f'<a href="#{i}">{n}</a>' for i, n in ANCHORS)
     sw = "".join(f'<a href="{s}.html"' + (' aria-current="page"' if s == slug else "") + f">{esc(n)}</a>" for n, s in SWITCH)
     gains = "".join(f'<li><span class="gain__no">{n:02d}</span><b>{esc(a)}</b><span>{esc(b)}</span></li>'
@@ -149,7 +150,7 @@ def build(slug, repo):
       <div>
         <p class="eyebrow">TEST</p>
         <h1>{d["h1"].replace("&", "&amp;")}</h1>
-        <p class="ph__lead">{esc(d["lead"])}</p>
+        {lead_html}
         <div class="ph__cta">
           <a class="btn btn--fill" href="../index.html#inquiry">{t} 견적문의</a>
           <a class="btn btn--line" href="#proc">발급 프로세스 보기</a>
