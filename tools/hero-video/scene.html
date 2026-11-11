@@ -1,128 +1,181 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8">
-<style>html,body{margin:0;background:#04102a}canvas{display:block}</style></head>
+<style>html,body{margin:0;background:#02030c}canvas{display:block}</style></head>
 <body><canvas id="c" width="1920" height="1080"></canvas>
 <script>
-/* KTAR 히어로 영상 장면. render(t) 는 t∈[0,1) 에서 완전히 반복(루프)된다.
-   측정·검증을 형상화: 노드 네트워크 + 스캔 라인 + 게이지 링 + 막대 지표. 모두 자체 제작. */
+/* KTAR 히어로 영상 장면 (자체 제작). render(t) 는 t∈[0,1) 에서 완전히 반복된다.
+   어두운 배경 + 네온 회로 트레이스가 원근으로 다가오는 장면, 흐르는 빛, 입자, 떠다니는 패널. 글자 없음. */
 const W = 1920, H = 1080, TAU = Math.PI * 2;
-const ctx = document.getElementById('c').getContext('2d');
+const main = document.getElementById('c').getContext('2d');
+const off = document.createElement('canvas'); off.width = W; off.height = H;
+const ctx = off.getContext('2d');
 
-// 의사난수 (고정 시드 → 매 실행 동일)
-let seed = 7;
+let seed = 11;
 const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const PAL = ['34,211,238', '59,130,246', '168,85,247', '244,114,182'];
 
-const NODES = Array.from({ length: 70 }, () => ({
-  x: rnd() * W, y: rnd() * H,
-  ax: 20 + rnd() * 50, ay: 20 + rnd() * 50,
-  fx: 1 + Math.floor(rnd() * 2), fy: 1 + Math.floor(rnd() * 2),
-  px: rnd() * TAU, py: rnd() * TAU,
-  r: 1.5 + rnd() * 2.5,
-}));
-const BARS = Array.from({ length: 22 }, (_, i) => ({
-  x: 1120 + i * 34, base: 0.25 + rnd() * 0.6, f: 1 + Math.floor(rnd() * 3), p: rnd() * TAU,
-}));
-const RINGS = [
-  { x: 1380, y: 400, r: 190, f: 1 },
-  { x: 1380, y: 400, r: 130, f: 2 },
-  { x: 520, y: 720, r: 120, f: 1 },
-];
+const HOR = 230, F = 900, CAMH = 430, D = 1600, ZMAX = 5600, ZMIN = 330;
+const mod = (a, n) => ((a % n) + n) % n;
+function proj(x, y, z, cx) { const k = F / z; return [W / 2 + (x - cx) * k, HOR + (CAMH - y) * k, k]; }
+const fog = (z) => Math.pow(Math.max(0, 1 - z / ZMAX), 1.6);
 
-// x 위치와 시간으로 정해지는 색조(루프: t 는 정수 주기 회전)
-function hue(x, t) { return Math.round((190 + (x / W) * 130 + t * 360) % 360); }
+// 회로 번들: 평행선 여러 개가 같은 경로를 따라 진행 (경로는 한 타일(D)마다 반복)
+const BUNDLES = Array.from({ length: 11 }, (_, i) => {
+  const cx = -1700 + i * 340 + (rnd() - 0.5) * 120;
+  const a = 150 + rnd() * 300, b = 700 + rnd() * 300, sl = 140 + rnd() * 120;
+  const s = (rnd() < 0.5 ? -1 : 1) * (110 + rnd() * 120);
+  const n = 3 + Math.floor(rnd() * 4);
+  return {
+    pts: [[0, 0], [a, 0], [a + sl, s], [b, s], [b + sl, 0], [D, 0]].map(([z, dx]) => [z, cx + dx]),
+    n, gap: 15 + rnd() * 6, col: PAL[i % PAL.length], pulse: rnd(),
+  };
+});
+function pathX(pts, z) {
+  for (let i = 0; i < pts.length - 1; i++) {
+    if (z <= pts[i + 1][0]) { const u = (z - pts[i][0]) / (pts[i + 1][0] - pts[i][0]); return pts[i][1] + (pts[i + 1][1] - pts[i][1]) * u; }
+  }
+  return pts[pts.length - 1][1];
+}
 
-function pos(n, t) {
-  return [n.x + n.ax * Math.sin(TAU * n.fx * t + n.px), n.y + n.ay * Math.cos(TAU * n.fy * t + n.py)];
+const DOTS = Array.from({ length: 260 }, () => ({ x: (rnd() - 0.5) * 3600, y: rnd() * 520, z: rnd() * D * 3, c: PAL[Math.floor(rnd() * 4)], r: 1 + rnd() * 2 }));
+const PANELS = Array.from({ length: 9 }, () => ({ x: (rnd() - 0.5) * 2600, y: 120 + rnd() * 320, z: rnd() * D, c: PAL[Math.floor(rnd() * 4)], rot: rnd() * TAU, s: 50 + rnd() * 50 }));
+const RIBBONS = Array.from({ length: 10 }, (_, i) => ({ by: 120 + i * 48, A: 30 + rnd() * 70, c: 0.7 + rnd() * 1.1, m: 1 + (i % 2), p: rnd() * TAU }));
+
+function seg(a, b, cx) { // 두 점을 투영, 근거리 클립. a,b = [x, zc]
+  let [x1, z1] = a, [x2, z2] = b;
+  if (z1 < ZMIN && z2 < ZMIN) return null;
+  if (z1 < ZMIN) { const u = (ZMIN - z1) / (z2 - z1); x1 += (x2 - x1) * u; z1 = ZMIN; }
+  if (z2 < ZMIN) { const u = (ZMIN - z2) / (z1 - z2); x2 += (x1 - x2) * u; z2 = ZMIN; }
+  return [proj(x1, 0, z1, cx), proj(x2, 0, z2, cx), (z1 + z2) / 2];
+}
+
+function glowDot(x, y, r, col, a) {
+  const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+  g.addColorStop(0, `rgba(${col},${a})`); g.addColorStop(0.35, `rgba(${col},${a * 0.45})`); g.addColorStop(1, `rgba(${col},0)`);
+  ctx.fillStyle = g; ctx.fillRect(x - r, y - r, r * 2, r * 2);
+}
+
+function drawScene(t) {
+  const cx = 90 * Math.sin(TAU * t); // 카메라 좌우 흔들림
+
+  // 배경
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, '#02030c'); g.addColorStop(0.35, '#070a2e'); g.addColorStop(1, '#0a0830');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'lighter';
+  [['59,130,246', 1500, 260, 700, 0.30], ['168,85,247', 700, 620, 620, 0.20], ['244,114,182', 1700, 760, 480, 0.14]].forEach(([c, x, y, r, a]) => glowDot(x, y, r, c, a));
+
+  // 흐르는 빛 리본 (상단)
+  RIBBONS.forEach((rb) => {
+    const gr = ctx.createLinearGradient(0, 0, W, 0);
+    gr.addColorStop(0, 'rgba(34,211,238,0)'); gr.addColorStop(0.35, 'rgba(59,130,246,0.55)');
+    gr.addColorStop(0.7, 'rgba(168,85,247,0.55)'); gr.addColorStop(1, 'rgba(244,114,182,0)');
+    ctx.strokeStyle = gr;
+    for (const [w, al] of [[6, 0.12], [1.6, 0.7]]) {
+      ctx.lineWidth = w; ctx.globalAlpha = al;
+      ctx.beginPath();
+      for (let x = 0; x <= W; x += 24) {
+        const y = rb.by + rb.A * Math.sin(TAU * (rb.c * x / W + rb.m * t) + rb.p) * (0.4 + 0.6 * x / W);
+        x ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      }
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  });
+
+  // 회로 트레이스
+  const tiles = Math.ceil(ZMAX / D) + 2;
+  for (const bd of BUNDLES) {
+    for (let li = 0; li < bd.n; li++) {
+      const lo = (li - (bd.n - 1) / 2) * bd.gap;
+      for (let n = 0; n < tiles; n++) {
+        const base = n * D - t * D;
+        for (let i = 0; i < bd.pts.length - 1; i++) {
+          const s = seg([bd.pts[i][1] + lo, bd.pts[i][0] + base], [bd.pts[i + 1][1] + lo, bd.pts[i + 1][0] + base], cx);
+          if (!s) continue;
+          const al = fog(s[2]); if (al < 0.02) continue;
+          const k = s[0][2];
+          ctx.strokeStyle = `rgba(${bd.col},${al * 0.2})`; ctx.lineWidth = Math.min(14, 2 + k * 2.6);
+          ctx.beginPath(); ctx.moveTo(s[0][0], s[0][1]); ctx.lineTo(s[1][0], s[1][1]); ctx.stroke();
+          ctx.strokeStyle = `rgba(${bd.col},${Math.min(1, al * 1.3)})`; ctx.lineWidth = Math.min(4, 0.7 + k * 0.7);
+          ctx.beginPath(); ctx.moveTo(s[0][0], s[0][1]); ctx.lineTo(s[1][0], s[1][1]); ctx.stroke();
+        }
+        // 노드 (번들 중앙선 꺾임점)
+        if (li === 0) for (let i = 1; i < bd.pts.length - 1; i++) {
+          const zc = bd.pts[i][0] + base; if (zc < ZMIN || zc > ZMAX) continue;
+          const p = proj(bd.pts[i][1], 0, zc, cx), al = fog(zc);
+          glowDot(p[0], p[1], Math.min(46, 6 + p[2] * 8), bd.col, Math.min(1, al * 1.4));
+        }
+        // 흐르는 빛 펄스 (루프당 2회전)
+        const zp = mod(bd.pulse * D - 2 * t * D + li * 130, D);
+        const zc = zp + base;
+        if (zc >= ZMIN && zc <= ZMAX) {
+          const p = proj(pathX(bd.pts, zp) + lo, 0, zc, cx);
+          glowDot(p[0], p[1], Math.min(40, 7 + p[2] * 7), '255,255,255', Math.min(1, fog(zc) * 1.6));
+          glowDot(p[0], p[1], Math.min(70, 14 + p[2] * 12), bd.col, Math.min(0.9, fog(zc) * 1.2));
+        }
+      }
+    }
+  }
+
+  // 떠다니는 패널(회전하는 사각 테두리)
+  PANELS.forEach((pn) => {
+    for (let n = 0; n < tiles; n++) {
+      const zc = pn.z + n * D - t * D; if (zc < ZMIN + 200 || zc > ZMAX) continue;
+      const p = proj(pn.x, pn.y, zc, cx), r = pn.s * p[2] * 0.55, al = fog(zc);
+      ctx.save(); ctx.translate(p[0], p[1]); ctx.rotate(pn.rot + TAU * t);
+      ctx.strokeStyle = `rgba(${pn.c},${al * 0.9})`; ctx.lineWidth = Math.max(1, p[2] * 1.2);
+      ctx.strokeRect(-r, -r, r * 2, r * 2);
+      ctx.fillStyle = `rgba(${pn.c},${al * 0.12})`; ctx.fillRect(-r, -r, r * 2, r * 2);
+      ctx.restore();
+    }
+  });
+
+  // 입자 / 보케
+  DOTS.forEach((d) => {
+    const zc = mod(d.z - t * 3 * D, D * 3); if (zc < ZMIN || zc > ZMAX) return;
+    const p = proj(d.x, d.y, zc, cx), al = fog(zc);
+    if (p[0] < -50 || p[0] > W + 50 || p[1] < -50 || p[1] > H + 50) return;
+    if (p[2] > 2.2) glowDot(p[0], p[1], 10 + p[2] * 6, d.c, al * 0.5);
+    else { ctx.fillStyle = `rgba(${d.c},${al})`; ctx.beginPath(); ctx.arc(p[0], p[1], d.r * Math.max(0.8, p[2] * 0.8), 0, TAU); ctx.fill(); }
+  });
+
+  // 우측 코어(글자 없는 홀로그램 링)
+  const kx = 1440, ky = 470;
+  glowDot(kx, ky, 380, '59,130,246', 0.35);
+  [[210, 1, '34,211,238'], [150, -2, '168,85,247'], [96, 3, '244,114,182']].forEach(([r, f, c], i) => {
+    const pulse = 0.5 + 0.5 * Math.sin(TAU * (t * (i + 1)));
+    ctx.strokeStyle = `rgba(${c},${0.35 + 0.3 * pulse})`; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.arc(kx, ky, r + 6 * pulse, 0, TAU); ctx.stroke();
+    const a0 = TAU * f * t + i; ctx.lineWidth = 6; ctx.lineCap = 'round';
+    ctx.strokeStyle = `rgba(${c},0.95)`;
+    ctx.beginPath(); ctx.arc(kx, ky, r - 14, a0, a0 + TAU * 0.2); ctx.stroke();
+    ctx.lineWidth = 1; ctx.strokeStyle = `rgba(${c},0.4)`;
+    for (let k = 0; k < 40; k++) {
+      const a = (k / 40) * TAU, r1 = r - 34, r2 = r - (k % 5 ? 42 : 52);
+      ctx.beginPath(); ctx.moveTo(kx + Math.cos(a) * r1, ky + Math.sin(a) * r1); ctx.lineTo(kx + Math.cos(a) * r2, ky + Math.sin(a) * r2); ctx.stroke();
+    }
+  });
+  glowDot(kx, ky, 70, '255,255,255', 0.9);
+
+  ctx.globalCompositeOperation = 'source-over';
 }
 
 function render(t) {
-  // 배경
-  const g = ctx.createLinearGradient(0, 0, W, H);
-  g.addColorStop(0, '#07123a'); g.addColorStop(0.5, '#10206e'); g.addColorStop(1, '#0a4aa8');
-  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-
-  // 오로라 색 빛 덩어리 (루프: 정수 주기)
-  const BLOBS = [
-    { c: '34,211,238', x: 1400, y: 380, r: 640, ax: 120, ay: 80, f: 1, p: 0 },
-    { c: '168,85,247', x: 1000, y: 820, r: 560, ax: 160, ay: 90, f: 1, p: 2.1 },
-    { c: '244,114,182', x: 1600, y: 860, r: 460, ax: 110, ay: 100, f: 2, p: 4.0 },
-    { c: '251,146,60', x: 760, y: 140, r: 420, ax: 140, ay: 70, f: 1, p: 5.2 },
-    { c: '52,211,153', x: 420, y: 980, r: 460, ax: 120, ay: 60, f: 2, p: 1.0 },
-  ];
-  ctx.globalCompositeOperation = 'lighter';
-  BLOBS.forEach((b) => {
-    const bx = b.x + b.ax * Math.sin(TAU * b.f * t + b.p), by = b.y + b.ay * Math.cos(TAU * b.f * t + b.p);
-    const gb = ctx.createRadialGradient(bx, by, 0, bx, by, b.r);
-    gb.addColorStop(0, `rgba(${b.c},0.34)`); gb.addColorStop(1, `rgba(${b.c},0)`);
-    ctx.fillStyle = gb; ctx.fillRect(0, 0, W, H);
-  });
-  ctx.globalCompositeOperation = 'source-over';
-
-  // 격자 (천천히 이동, 1칸 = 80px → 반복)
-  ctx.strokeStyle = 'rgba(125,190,255,0.10)'; ctx.lineWidth = 1;
-  const off = (t * 80) % 80;
-  for (let x = -80 + off; x < W + 80; x += 80) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
-  for (let y = -80 + off; y < H + 80; y += 80) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
-
-  // 네트워크 연결선
-  const P = NODES.map((n) => pos(n, t));
-  for (let i = 0; i < P.length; i++) for (let j = i + 1; j < P.length; j++) {
-    const d = Math.hypot(P[i][0] - P[j][0], P[i][1] - P[j][1]);
-    if (d < 230) {
-      ctx.strokeStyle = `hsla(${hue(P[i][0], t)},95%,72%,${(1 - d / 230) * 0.5})`;
-      ctx.beginPath(); ctx.moveTo(P[i][0], P[i][1]); ctx.lineTo(P[j][0], P[j][1]); ctx.stroke();
-    }
-  }
-  P.forEach((p, i) => {
-    ctx.fillStyle = `hsla(${hue(p[0], t)},100%,82%,0.95)`;
-    ctx.shadowColor = `hsla(${hue(p[0], t)},100%,70%,0.9)`; ctx.shadowBlur = 12;
-    ctx.beginPath(); ctx.arc(p[0], p[1], NODES[i].r + 0.6, 0, TAU); ctx.fill();
-    ctx.shadowBlur = 0;
-  });
-
-  // 게이지 링
-  RINGS.forEach((rg) => {
-    const pulse = 0.5 + 0.5 * Math.sin(TAU * rg.f * t);
-    ctx.strokeStyle = `hsla(${hue(rg.x, t)},95%,70%,${0.35 + 0.35 * pulse})`; ctx.lineWidth = 2.5;
-    ctx.beginPath(); ctx.arc(rg.x, rg.y, rg.r + 8 * pulse, 0, TAU); ctx.stroke();
-    const a0 = TAU * (rg.f * t);
-    ctx.strokeStyle = `hsla(${hue(rg.x + 200, t)},100%,78%,0.95)`; ctx.lineWidth = 5; ctx.lineCap = 'round';
-    ctx.beginPath(); ctx.arc(rg.x, rg.y, rg.r - 14, a0, a0 + TAU * 0.22); ctx.stroke();
-    ctx.strokeStyle = 'rgba(103,214,255,0.25)'; ctx.lineWidth = 1;
-    for (let k = 0; k < 48; k++) {
-      const a = (k / 48) * TAU, r1 = rg.r - 34, r2 = rg.r - (k % 4 ? 42 : 50);
-      ctx.beginPath(); ctx.moveTo(rg.x + Math.cos(a) * r1, rg.y + Math.sin(a) * r1);
-      ctx.lineTo(rg.x + Math.cos(a) * r2, rg.y + Math.sin(a) * r2); ctx.stroke();
-    }
-  });
-
-  // 막대 지표
-  BARS.forEach((b, i) => {
-    const h = 260 * (b.base * 0.7 + 0.3 * (0.5 + 0.5 * Math.sin(TAU * b.f * t + b.p)));
-    const hh = (170 + i * 8 + t * 360) % 360;
-    const bg = ctx.createLinearGradient(0, 940 - h, 0, 940);
-    bg.addColorStop(0, `hsla(${hh},95%,68%,0.85)`); bg.addColorStop(1, `hsla(${(hh + 50) % 360},90%,55%,0.12)`);
-    ctx.fillStyle = bg; ctx.fillRect(b.x, 940 - h, 18, h);
-  });
-  ctx.strokeStyle = 'rgba(125,190,255,0.35)'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(1100, 940); ctx.lineTo(1880, 940); ctx.stroke();
-
-  // 스캔 라인 (좌→우 1회 / 루프)
-  const sx = (t * (W + 400)) - 200;
-  const sg = ctx.createLinearGradient(sx - 160, 0, sx, 0);
-  sg.addColorStop(0, 'rgba(244,114,182,0)'); sg.addColorStop(1, 'rgba(244,114,182,0.3)');
-  ctx.fillStyle = sg; ctx.fillRect(sx - 160, 0, 160, H);
-  ctx.fillStyle = 'rgba(255,220,240,0.85)'; ctx.fillRect(sx, 0, 2, H);
-
-  // 좌측 가독성을 위한 어둡게 처리 (텍스트 영역)
-  const sh = ctx.createLinearGradient(0, 0, W * 0.7, 0);
-  sh.addColorStop(0, 'rgba(6,14,50,0.55)'); sh.addColorStop(1, 'rgba(4,16,42,0)');
-  ctx.fillStyle = sh; ctx.fillRect(0, 0, W, H);
-
-  // 필름 그레인 대신 약한 비네팅
-  const vg = ctx.createRadialGradient(W / 2, H / 2, H * 0.5, W / 2, H / 2, H * 1.1);
-  vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.35)');
-  ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+  drawScene(t);
+  main.globalCompositeOperation = 'source-over'; main.filter = 'none'; main.globalAlpha = 1;
+  main.drawImage(off, 0, 0);
+  // 블룸
+  main.globalCompositeOperation = 'lighter'; main.filter = 'blur(16px)'; main.globalAlpha = 0.75;
+  main.drawImage(off, 0, 0);
+  main.filter = 'none'; main.globalAlpha = 1; main.globalCompositeOperation = 'source-over';
+  // 좌측 텍스트 가독성
+  const sh = main.createLinearGradient(0, 0, W * 0.65, 0);
+  sh.addColorStop(0, 'rgba(2,3,12,0.7)'); sh.addColorStop(1, 'rgba(2,3,12,0)');
+  main.fillStyle = sh; main.fillRect(0, 0, W, H);
+  const vg = main.createRadialGradient(W / 2, H / 2, H * 0.5, W / 2, H / 2, H * 1.1);
+  vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.45)');
+  main.fillStyle = vg; main.fillRect(0, 0, W, H);
 }
 window.render = render;
 render(0);
