@@ -28,6 +28,9 @@ const RINGS = [
   { x: 520, y: 720, r: 120, f: 1 },
 ];
 
+// x 위치와 시간으로 정해지는 색조(루프: t 는 정수 주기 회전)
+function hue(x, t) { return Math.round((190 + (x / W) * 130 + t * 360) % 360); }
+
 function pos(n, t) {
   return [n.x + n.ax * Math.sin(TAU * n.fx * t + n.px), n.y + n.ay * Math.cos(TAU * n.fy * t + n.py)];
 }
@@ -35,13 +38,25 @@ function pos(n, t) {
 function render(t) {
   // 배경
   const g = ctx.createLinearGradient(0, 0, W, H);
-  g.addColorStop(0, '#04102a'); g.addColorStop(0.55, '#0a2a5e'); g.addColorStop(1, '#0b4a8f');
+  g.addColorStop(0, '#07123a'); g.addColorStop(0.5, '#10206e'); g.addColorStop(1, '#0a4aa8');
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
 
-  // 광원
-  const gl = ctx.createRadialGradient(1380, 400, 0, 1380, 400, 700);
-  gl.addColorStop(0, 'rgba(56,189,248,0.38)'); gl.addColorStop(1, 'rgba(56,189,248,0)');
-  ctx.fillStyle = gl; ctx.fillRect(0, 0, W, H);
+  // 오로라 색 빛 덩어리 (루프: 정수 주기)
+  const BLOBS = [
+    { c: '34,211,238', x: 1400, y: 380, r: 640, ax: 120, ay: 80, f: 1, p: 0 },
+    { c: '168,85,247', x: 1000, y: 820, r: 560, ax: 160, ay: 90, f: 1, p: 2.1 },
+    { c: '244,114,182', x: 1600, y: 860, r: 460, ax: 110, ay: 100, f: 2, p: 4.0 },
+    { c: '251,146,60', x: 760, y: 140, r: 420, ax: 140, ay: 70, f: 1, p: 5.2 },
+    { c: '52,211,153', x: 420, y: 980, r: 460, ax: 120, ay: 60, f: 2, p: 1.0 },
+  ];
+  ctx.globalCompositeOperation = 'lighter';
+  BLOBS.forEach((b) => {
+    const bx = b.x + b.ax * Math.sin(TAU * b.f * t + b.p), by = b.y + b.ay * Math.cos(TAU * b.f * t + b.p);
+    const gb = ctx.createRadialGradient(bx, by, 0, bx, by, b.r);
+    gb.addColorStop(0, `rgba(${b.c},0.34)`); gb.addColorStop(1, `rgba(${b.c},0)`);
+    ctx.fillStyle = gb; ctx.fillRect(0, 0, W, H);
+  });
+  ctx.globalCompositeOperation = 'source-over';
 
   // 격자 (천천히 이동, 1칸 = 80px → 반복)
   ctx.strokeStyle = 'rgba(125,190,255,0.10)'; ctx.lineWidth = 1;
@@ -54,22 +69,24 @@ function render(t) {
   for (let i = 0; i < P.length; i++) for (let j = i + 1; j < P.length; j++) {
     const d = Math.hypot(P[i][0] - P[j][0], P[i][1] - P[j][1]);
     if (d < 230) {
-      ctx.strokeStyle = `rgba(120,200,255,${(1 - d / 230) * 0.38})`;
+      ctx.strokeStyle = `hsla(${hue(P[i][0], t)},95%,72%,${(1 - d / 230) * 0.5})`;
       ctx.beginPath(); ctx.moveTo(P[i][0], P[i][1]); ctx.lineTo(P[j][0], P[j][1]); ctx.stroke();
     }
   }
   P.forEach((p, i) => {
-    ctx.fillStyle = 'rgba(190,230,255,0.9)';
-    ctx.beginPath(); ctx.arc(p[0], p[1], NODES[i].r, 0, TAU); ctx.fill();
+    ctx.fillStyle = `hsla(${hue(p[0], t)},100%,82%,0.95)`;
+    ctx.shadowColor = `hsla(${hue(p[0], t)},100%,70%,0.9)`; ctx.shadowBlur = 12;
+    ctx.beginPath(); ctx.arc(p[0], p[1], NODES[i].r + 0.6, 0, TAU); ctx.fill();
+    ctx.shadowBlur = 0;
   });
 
   // 게이지 링
   RINGS.forEach((rg) => {
     const pulse = 0.5 + 0.5 * Math.sin(TAU * rg.f * t);
-    ctx.strokeStyle = `rgba(103,214,255,${0.25 + 0.3 * pulse})`; ctx.lineWidth = 2;
+    ctx.strokeStyle = `hsla(${hue(rg.x, t)},95%,70%,${0.35 + 0.35 * pulse})`; ctx.lineWidth = 2.5;
     ctx.beginPath(); ctx.arc(rg.x, rg.y, rg.r + 8 * pulse, 0, TAU); ctx.stroke();
     const a0 = TAU * (rg.f * t);
-    ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+    ctx.strokeStyle = `hsla(${hue(rg.x + 200, t)},100%,78%,0.95)`; ctx.lineWidth = 5; ctx.lineCap = 'round';
     ctx.beginPath(); ctx.arc(rg.x, rg.y, rg.r - 14, a0, a0 + TAU * 0.22); ctx.stroke();
     ctx.strokeStyle = 'rgba(103,214,255,0.25)'; ctx.lineWidth = 1;
     for (let k = 0; k < 48; k++) {
@@ -80,10 +97,11 @@ function render(t) {
   });
 
   // 막대 지표
-  BARS.forEach((b) => {
+  BARS.forEach((b, i) => {
     const h = 260 * (b.base * 0.7 + 0.3 * (0.5 + 0.5 * Math.sin(TAU * b.f * t + b.p)));
+    const hh = (170 + i * 8 + t * 360) % 360;
     const bg = ctx.createLinearGradient(0, 940 - h, 0, 940);
-    bg.addColorStop(0, 'rgba(125,211,252,0.55)'); bg.addColorStop(1, 'rgba(37,99,235,0.08)');
+    bg.addColorStop(0, `hsla(${hh},95%,68%,0.85)`); bg.addColorStop(1, `hsla(${(hh + 50) % 360},90%,55%,0.12)`);
     ctx.fillStyle = bg; ctx.fillRect(b.x, 940 - h, 18, h);
   });
   ctx.strokeStyle = 'rgba(125,190,255,0.35)'; ctx.lineWidth = 1;
@@ -92,13 +110,13 @@ function render(t) {
   // 스캔 라인 (좌→우 1회 / 루프)
   const sx = (t * (W + 400)) - 200;
   const sg = ctx.createLinearGradient(sx - 160, 0, sx, 0);
-  sg.addColorStop(0, 'rgba(103,214,255,0)'); sg.addColorStop(1, 'rgba(103,214,255,0.22)');
+  sg.addColorStop(0, 'rgba(244,114,182,0)'); sg.addColorStop(1, 'rgba(244,114,182,0.3)');
   ctx.fillStyle = sg; ctx.fillRect(sx - 160, 0, 160, H);
-  ctx.fillStyle = 'rgba(190,240,255,0.7)'; ctx.fillRect(sx, 0, 2, H);
+  ctx.fillStyle = 'rgba(255,220,240,0.85)'; ctx.fillRect(sx, 0, 2, H);
 
   // 좌측 가독성을 위한 어둡게 처리 (텍스트 영역)
   const sh = ctx.createLinearGradient(0, 0, W * 0.7, 0);
-  sh.addColorStop(0, 'rgba(4,16,42,0.62)'); sh.addColorStop(1, 'rgba(4,16,42,0)');
+  sh.addColorStop(0, 'rgba(6,14,50,0.55)'); sh.addColorStop(1, 'rgba(4,16,42,0)');
   ctx.fillStyle = sh; ctx.fillRect(0, 0, W, H);
 
   // 필름 그레인 대신 약한 비네팅
