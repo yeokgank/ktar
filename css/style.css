@@ -108,23 +108,44 @@ svg{display:block}
 .svc{padding:88px 0 40px}
 .sec-head{margin-bottom:36px}
 .sec-head h2{font-size:clamp(28px,3.2vw,42px);font-weight:800;letter-spacing:-.03em;color:var(--navy);line-height:1.3;word-break:keep-all}
-.svc__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
-.svc__card{display:flex;flex-direction:column;padding:36px 36px 30px;border-radius:var(--radius-lg);background:var(--card);box-shadow:var(--shadow);min-height:360px;transition:transform .3s var(--ease),box-shadow .3s}
-.svc__card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(11,33,80,.14)}
-.svc__card--dark{background:linear-gradient(135deg,#0b2150,#14407f);color:#fff}
-.svc__tag{font-size:13px;font-weight:800;letter-spacing:.14em;color:var(--blue);margin-bottom:12px}
-.svc__card--dark .svc__tag{color:var(--cyan)}
-.svc__card h3{font-size:30px;font-weight:800;letter-spacing:-.03em;margin-bottom:10px;color:var(--navy)}
-.svc__card--dark h3{color:#fff}
-.svc__card>p{font-size:16px;line-height:1.7;color:var(--muted);margin-bottom:24px;word-break:keep-all}
-.svc__card--dark>p{color:#c3d6f3}
-.svc__links{display:grid;gap:8px;margin-top:auto}
-.svc__links a{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-radius:var(--radius-sm);background:var(--bg);font-weight:700;font-size:16px;transition:background .2s,color .2s}
-.svc__links a::after{content:"\2192";font-weight:400;transition:transform .25s var(--ease)}
-.svc__links a:hover{background:var(--blue);color:#fff}
-.svc__links a:hover::after{transform:translateX(4px)}
-.svc__card--dark .svc__links a{background:rgba(255,255,255,.1);color:#fff}
-.svc__card--dark .svc__links a:hover{background:#fff;color:var(--navy)}
+.svc__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.svc__card{position:relative;display:flex;flex-direction:column;height:100%;min-height:300px;padding:32px 30px 28px;border-radius:var(--radius-lg);background:var(--card);box-shadow:var(--shadow);overflow:hidden;transition:transform .3s var(--ease),box-shadow .3s}
+.svc__card:hover{transform:translateY(-5px);box-shadow:0 18px 40px rgba(11,33,80,.15)}
+.svc__ic{display:grid;place-items:center;width:56px;height:56px;border-radius:16px;background:#e9f1fc;color:var(--blue);margin-bottom:22px}
+.svc__ic svg{width:30px;height:30px}
+.svc__card em{font-style:normal;font-size:12px;font-weight:800;letter-spacing:.14em;color:var(--blue);margin-bottom:8px}
+.svc__card h3{font-size:25px;font-weight:800;letter-spacing:-.03em;color:var(--navy);margin-bottom:10px;word-break:keep-all}
+.svc__card p{font-size:15.5px;line-height:1.7;color:var(--muted);word-break:keep-all}
+.svc__go{margin-top:auto;padding-top:22px;font-weight:700;font-size:15px;color:var(--blue);display:flex;align-items:center;gap:8px}
+.svc__go i{font-style:normal;transition:transform .25s var(--ease)}
+.svc__card:hover .svc__go i{transform:translateX(5px)}
+.svc__card--dark{background:linear-gradient(135deg,#0b2150,#14407f)}
+.svc__card--dark .svc__ic{background:rgba(255,255,255,.12);color:#fff}
+.svc__card--dark em,.svc__card--dark .svc__go{color:var(--cyan)}
+.svc__card--dark h3{color:#fff}.svc__card--dark p{color:#c3d6f3}
+.svc__card--accent{background:linear-gradient(135deg,#1a6fd1,#35a1ee)}
+.svc__card--accent .svc__ic{background:rgba(255,255,255,.2);color:#fff}
+.svc__card--accent em,.svc__card--accent .svc__go,.svc__card--accent h3{color:#fff}
+.svc__card--accent p{color:#e6f2ff}
+
+/* ───── 진행 절차 ───── */
+.flowsec{padding:56px 0 40px}
+.steps{display:grid;grid-template-columns:repeat(6,1fr);gap:0;counter-reset:s;background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow);overflow:hidden}
+.steps li{position:relative;padding:30px 22px 32px;border-left:1px solid var(--line)}
+.steps li:first-child{border-left:0}
+.steps li:not(:last-child)::after{content:"";position:absolute;right:-7px;top:38px;width:12px;height:12px;background:#fff;border-top:2px solid var(--sky);border-right:2px solid var(--sky);transform:rotate(45deg);z-index:1}
+.steps b{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:12px;background:var(--navy);color:#fff;font-size:14px;margin-bottom:16px}
+.steps li:last-child b{background:var(--blue)}
+.steps h3{font-size:17px;font-weight:800;color:var(--navy);margin-bottom:8px;letter-spacing:-.02em;word-break:keep-all}
+.steps p{font-size:14px;line-height:1.65;color:var(--muted);word-break:keep-all}
+
+/* ───── 핵심 가치 ───── */
+.values{padding:56px 0 24px}
+.values__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.values__grid>div{padding:40px 34px;border-radius:var(--radius-lg);background:var(--card);box-shadow:var(--shadow)}
+.values__grid b{display:block;font-size:56px;line-height:1;font-weight:800;letter-spacing:-.04em;margin-bottom:22px;color:transparent;-webkit-text-stroke:2px var(--sky)}
+.values__grid h3{font-size:28px;font-weight:800;color:var(--navy);letter-spacing:-.03em;margin-bottom:10px}
+.values__grid p{font-size:16px;line-height:1.75;color:var(--muted);word-break:keep-all}
 
 /* ───── 소개 밴드 (짙은 남색) ───── */
 .about{position:relative;margin-top:56px;padding:112px 0 96px;background:var(--navy-deep);color:#fff;text-align:center;overflow:hidden;isolation:isolate}
@@ -189,6 +210,11 @@ svg{display:block}
   .visual__grid{grid-template-columns:1fr}
   .hero{grid-row:auto;min-height:480px}
   .qs__panel{grid-template-columns:repeat(3,1fr)}
+  .svc__grid{grid-template-columns:repeat(2,1fr)}
+  .steps{grid-template-columns:repeat(3,1fr)}
+  .steps li:nth-child(4){border-left:0}
+  .steps li:nth-child(n+4){border-top:1px solid var(--line)}
+  .steps li:nth-child(3)::after{display:none}
   .about__facts{grid-template-columns:repeat(2,1fr)}
   .inquiry__inner{grid-template-columns:1fr;gap:36px}
 }
@@ -214,8 +240,14 @@ svg{display:block}
   .qs,.promo{border-radius:var(--radius-md)}
   .qs__panel{grid-template-columns:repeat(2,1fr)}
   .svc{padding:56px 0 24px}
-  .svc__grid{grid-template-columns:1fr}
-  .svc__card{padding:28px 24px 24px;min-height:0}
+  .svc__grid,.values__grid{grid-template-columns:1fr}
+  .svc__card{padding:26px 22px 22px;min-height:0}
+  .steps{grid-template-columns:1fr}
+  .steps li{border-left:0;border-top:1px solid var(--line);padding:22px 20px}
+  .steps li:first-child{border-top:0}
+  .steps li:not(:last-child)::after{display:none}
+  .flowsec,.values{padding:36px 0 16px}
+  .values__grid>div{padding:28px 24px}
   .about{padding:72px 0 64px;margin-top:40px}
   .about__facts{grid-template-columns:1fr;margin-top:44px}
   .inquiry{padding:64px 0 72px}
