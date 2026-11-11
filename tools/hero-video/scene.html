@@ -1,163 +1,182 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8">
-<style>html,body{margin:0;background:#02030c}canvas{display:block}</style></head>
+<style>html,body{margin:0;background:#04102a}canvas{display:block}</style></head>
 <body><canvas id="c" width="1920" height="1080"></canvas>
 <script>
-/* KTAR 히어로 영상 장면 (자체 제작). render(t) 는 t∈[0,1) 에서 완전히 반복된다.
-   어두운 배경 + 네온 회로 트레이스가 원근으로 다가오는 장면, 흐르는 빛, 입자, 떠다니는 패널. 글자 없음. */
+/* KTAR 히어로 영상 (자체 제작) — 시험·평가·인증 과정을 상징.
+   측정 패널(파형·게이지) → 점검 항목 체크 → 스캔 라인 → 인증(방패+체크) 완료. 글자 없음.
+   render(t) 는 t∈[0,1) 에서 완전히 반복된다(콘텐츠는 t≈0 / t≈1 에서 투명). */
 const W = 1920, H = 1080, TAU = Math.PI * 2;
 const main = document.getElementById('c').getContext('2d');
 const off = document.createElement('canvas'); off.width = W; off.height = H;
 const ctx = off.getContext('2d');
 
-let seed = 11;
+let seed = 5;
 const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-const PAL = ['34,211,238', '59,130,246', '168,85,247', '244,114,182'];
-
-const HOR = 230, F = 900, CAMH = 430, D = 1600, ZMAX = 5600, ZMIN = 330;
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const sstep = (a, b, x) => { const u = clamp((x - a) / (b - a)); return u * u * (3 - 2 * u); };
+const easeOutBack = (u) => { const c = 1.70158; return 1 + (c + 1) * Math.pow(u - 1, 3) + c * Math.pow(u - 1, 2); };
 const mod = (a, n) => ((a % n) + n) % n;
-function proj(x, y, z, cx) { const k = F / z; return [W / 2 + (x - cx) * k, HOR + (CAMH - y) * k, k]; }
-const fog = (z) => Math.pow(Math.max(0, 1 - z / ZMAX), 1.6);
 
-// 회로 번들: 평행선 여러 개가 같은 경로를 따라 진행 (경로는 한 타일(D)마다 반복)
-const BUNDLES = Array.from({ length: 11 }, (_, i) => {
-  const cx = -1700 + i * 340 + (rnd() - 0.5) * 120;
-  const a = 150 + rnd() * 300, b = 700 + rnd() * 300, sl = 140 + rnd() * 120;
-  const s = (rnd() < 0.5 ? -1 : 1) * (110 + rnd() * 120);
-  const n = 3 + Math.floor(rnd() * 4);
-  return {
-    pts: [[0, 0], [a, 0], [a + sl, s], [b, s], [b + sl, 0], [D, 0]].map(([z, dx]) => [z, cx + dx]),
-    n, gap: 15 + rnd() * 6, col: PAL[i % PAL.length], pulse: rnd(),
-  };
-});
-function pathX(pts, z) {
-  for (let i = 0; i < pts.length - 1; i++) {
-    if (z <= pts[i + 1][0]) { const u = (z - pts[i][0]) / (pts[i + 1][0] - pts[i][0]); return pts[i][1] + (pts[i + 1][1] - pts[i][1]) * u; }
-  }
-  return pts[pts.length - 1][1];
-}
+const CY = '103,214,255', BL = '59,130,246', GR = '52,211,153', WH = '255,255,255';
+const PX = 1160, PY = 190, PW = 520, PH = 640; // 측정 패널
 
-const DOTS = Array.from({ length: 260 }, () => ({ x: (rnd() - 0.5) * 3600, y: rnd() * 520, z: rnd() * D * 3, c: PAL[Math.floor(rnd() * 4)], r: 1 + rnd() * 2 }));
-const PANELS = Array.from({ length: 9 }, () => ({ x: (rnd() - 0.5) * 2600, y: 120 + rnd() * 320, z: rnd() * D, c: PAL[Math.floor(rnd() * 4)], rot: rnd() * TAU, s: 50 + rnd() * 50 }));
-const RIBBONS = Array.from({ length: 10 }, (_, i) => ({ by: 120 + i * 48, A: 30 + rnd() * 70, c: 0.7 + rnd() * 1.1, m: 1 + (i % 2), p: rnd() * TAU }));
+const DUST = Array.from({ length: 110 }, () => ({ x: rnd() * W, y: rnd() * H, r: 0.8 + rnd() * 2.2, a: 0.2 + rnd() * 0.6, p: rnd() * TAU }));
+const ROW_T = [0.14, 0.27, 0.40, 0.53, 0.66]; // 점검 항목 완료 시점
+const BARW = [0.78, 0.62, 0.9, 0.7, 0.84]; // 항목 옆 값 자리표시 길이
 
-function seg(a, b, cx) { // 두 점을 투영, 근거리 클립. a,b = [x, zc]
-  let [x1, z1] = a, [x2, z2] = b;
-  if (z1 < ZMIN && z2 < ZMIN) return null;
-  if (z1 < ZMIN) { const u = (ZMIN - z1) / (z2 - z1); x1 += (x2 - x1) * u; z1 = ZMIN; }
-  if (z2 < ZMIN) { const u = (ZMIN - z2) / (z1 - z2); x2 += (x1 - x2) * u; z2 = ZMIN; }
-  return [proj(x1, 0, z1, cx), proj(x2, 0, z2, cx), (z1 + z2) / 2];
-}
-
-function glowDot(x, y, r, col, a) {
+function glow(x, y, r, col, a) {
   const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-  g.addColorStop(0, `rgba(${col},${a})`); g.addColorStop(0.35, `rgba(${col},${a * 0.45})`); g.addColorStop(1, `rgba(${col},0)`);
+  g.addColorStop(0, `rgba(${col},${a})`); g.addColorStop(0.4, `rgba(${col},${a * 0.4})`); g.addColorStop(1, `rgba(${col},0)`);
   ctx.fillStyle = g; ctx.fillRect(x - r, y - r, r * 2, r * 2);
 }
+function rr(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); }
 
 function drawScene(t) {
-  const cx = 90 * Math.sin(TAU * t); // 카메라 좌우 흔들림
+  const gA = sstep(0.0, 0.05, t) * (1 - sstep(0.93, 0.985, t)); // 콘텐츠 가시도
 
   // 배경
-  const g = ctx.createLinearGradient(0, 0, 0, H);
-  g.addColorStop(0, '#02030c'); g.addColorStop(0.35, '#070a2e'); g.addColorStop(1, '#0a0830');
-  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, '#040d26'); bg.addColorStop(0.55, '#0a2558'); bg.addColorStop(1, '#0b3f86');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
   ctx.globalCompositeOperation = 'lighter';
-  [['59,130,246', 1500, 260, 700, 0.30], ['168,85,247', 700, 620, 620, 0.20], ['244,114,182', 1700, 760, 480, 0.14]].forEach(([c, x, y, r, a]) => glowDot(x, y, r, c, a));
+  glow(1420, 470, 760, BL, 0.32); glow(1700, 880, 520, CY, 0.12); glow(500, 900, 520, BL, 0.12);
 
-  // 흐르는 빛 리본 (상단)
-  RIBBONS.forEach((rb) => {
-    const gr = ctx.createLinearGradient(0, 0, W, 0);
-    gr.addColorStop(0, 'rgba(34,211,238,0)'); gr.addColorStop(0.35, 'rgba(59,130,246,0.55)');
-    gr.addColorStop(0.7, 'rgba(168,85,247,0.55)'); gr.addColorStop(1, 'rgba(244,114,182,0)');
-    ctx.strokeStyle = gr;
-    for (const [w, al] of [[6, 0.12], [1.6, 0.7]]) {
-      ctx.lineWidth = w; ctx.globalAlpha = al;
-      ctx.beginPath();
-      for (let x = 0; x <= W; x += 24) {
-        const y = rb.by + rb.A * Math.sin(TAU * (rb.c * x / W + rb.m * t) + rb.p) * (0.4 + 0.6 * x / W);
-        x ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
-      }
-      ctx.stroke();
-    }
-    ctx.globalAlpha = 1;
-  });
-
-  // 회로 트레이스
-  const tiles = Math.ceil(ZMAX / D) + 2;
-  for (const bd of BUNDLES) {
-    for (let li = 0; li < bd.n; li++) {
-      const lo = (li - (bd.n - 1) / 2) * bd.gap;
-      for (let n = 0; n < tiles; n++) {
-        const base = n * D - t * D;
-        for (let i = 0; i < bd.pts.length - 1; i++) {
-          const s = seg([bd.pts[i][1] + lo, bd.pts[i][0] + base], [bd.pts[i + 1][1] + lo, bd.pts[i + 1][0] + base], cx);
-          if (!s) continue;
-          const al = fog(s[2]); if (al < 0.02) continue;
-          const k = s[0][2];
-          ctx.strokeStyle = `rgba(${bd.col},${al * 0.2})`; ctx.lineWidth = Math.min(14, 2 + k * 2.6);
-          ctx.beginPath(); ctx.moveTo(s[0][0], s[0][1]); ctx.lineTo(s[1][0], s[1][1]); ctx.stroke();
-          ctx.strokeStyle = `rgba(${bd.col},${Math.min(1, al * 1.3)})`; ctx.lineWidth = Math.min(4, 0.7 + k * 0.7);
-          ctx.beginPath(); ctx.moveTo(s[0][0], s[0][1]); ctx.lineTo(s[1][0], s[1][1]); ctx.stroke();
-        }
-        // 노드 (번들 중앙선 꺾임점)
-        if (li === 0) for (let i = 1; i < bd.pts.length - 1; i++) {
-          const zc = bd.pts[i][0] + base; if (zc < ZMIN || zc > ZMAX) continue;
-          const p = proj(bd.pts[i][1], 0, zc, cx), al = fog(zc);
-          glowDot(p[0], p[1], Math.min(46, 6 + p[2] * 8), bd.col, Math.min(1, al * 1.4));
-        }
-        // 흐르는 빛 펄스 (루프당 2회전)
-        const zp = mod(bd.pulse * D - 2 * t * D + li * 130, D);
-        const zc = zp + base;
-        if (zc >= ZMIN && zc <= ZMAX) {
-          const p = proj(pathX(bd.pts, zp) + lo, 0, zc, cx);
-          glowDot(p[0], p[1], Math.min(40, 7 + p[2] * 7), '255,255,255', Math.min(1, fog(zc) * 1.6));
-          glowDot(p[0], p[1], Math.min(70, 14 + p[2] * 12), bd.col, Math.min(0.9, fog(zc) * 1.2));
-        }
-      }
-    }
+  // 바닥 원근 격자
+  const VPY = 640;
+  ctx.lineWidth = 1;
+  for (let j = 0; j <= 14; j++) {
+    const u = (j + t) / 14; if (u > 1) continue;
+    const y = VPY + (H - VPY) * u * u;
+    ctx.strokeStyle = `rgba(${CY},${0.05 + 0.2 * u})`;
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+  for (let i = -16; i <= 16; i++) {
+    ctx.strokeStyle = `rgba(${CY},0.09)`;
+    ctx.beginPath(); ctx.moveTo(W / 2 + i * 40, VPY); ctx.lineTo(W / 2 + i * 260, H); ctx.stroke();
   }
 
-  // 떠다니는 패널(회전하는 사각 테두리)
-  PANELS.forEach((pn) => {
-    for (let n = 0; n < tiles; n++) {
-      const zc = pn.z + n * D - t * D; if (zc < ZMIN + 200 || zc > ZMAX) continue;
-      const p = proj(pn.x, pn.y, zc, cx), r = pn.s * p[2] * 0.55, al = fog(zc);
-      ctx.save(); ctx.translate(p[0], p[1]); ctx.rotate(pn.rot + TAU * t);
-      ctx.strokeStyle = `rgba(${pn.c},${al * 0.9})`; ctx.lineWidth = Math.max(1, p[2] * 1.2);
-      ctx.strokeRect(-r, -r, r * 2, r * 2);
-      ctx.fillStyle = `rgba(${pn.c},${al * 0.12})`; ctx.fillRect(-r, -r, r * 2, r * 2);
-      ctx.restore();
+  // 먼지 입자
+  DUST.forEach((d) => {
+    const y = mod(d.y - t * H, H), x = d.x + 14 * Math.sin(TAU * t + d.p);
+    ctx.fillStyle = `rgba(${CY},${d.a * 0.55})`; ctx.beginPath(); ctx.arc(x, y, d.r, 0, TAU); ctx.fill();
+  });
+
+  // ───── 측정 패널 ─────
+  ctx.globalCompositeOperation = 'source-over';
+  const dim = 1 - 0.55 * sstep(0.72, 0.8, t) * (1 - sstep(0.9, 0.96, t)); // 인증 순간엔 패널을 살짝 어둡게
+  ctx.fillStyle = 'rgba(255,255,255,0.06)'; rr(PX, PY, PW, PH, 26); ctx.fill();
+  ctx.strokeStyle = `rgba(${CY},0.4)`; ctx.lineWidth = 2; rr(PX, PY, PW, PH, 26); ctx.stroke();
+  ctx.save(); ctx.globalAlpha = dim;
+  // 헤더(점 3개 + 라인)
+  [0, 1, 2].forEach((i) => { ctx.fillStyle = `rgba(${CY},${0.55 - i * 0.12})`; ctx.beginPath(); ctx.arc(PX + 34 + i * 22, PY + 32, 6, 0, TAU); ctx.fill(); });
+  ctx.fillStyle = 'rgba(255,255,255,0.12)'; rr(PX + 150, PY + 26, 220, 12, 6); ctx.fill();
+
+  // 파형 영역
+  const WX = PX + 28, WY = PY + 70, WW = 330, WH = 170;
+  ctx.fillStyle = 'rgba(4,16,42,0.45)'; rr(WX, WY, WW, WH, 14); ctx.fill();
+  ctx.strokeStyle = 'rgba(125,200,255,0.12)'; ctx.lineWidth = 1;
+  for (let i = 1; i < 6; i++) { ctx.beginPath(); ctx.moveTo(WX, WY + i * WH / 6); ctx.lineTo(WX + WW, WY + i * WH / 6); ctx.stroke(); }
+  for (let i = 1; i < 8; i++) { ctx.beginPath(); ctx.moveTo(WX + i * WW / 8, WY); ctx.lineTo(WX + i * WW / 8, WY + WH); ctx.stroke(); }
+  ctx.save(); ctx.beginPath(); ctx.rect(WX, WY, WW, WH); ctx.clip();
+  ctx.setLineDash([6, 6]); ctx.strokeStyle = `rgba(${GR},0.5)`; ctx.beginPath(); ctx.moveTo(WX, WY + 48); ctx.lineTo(WX + WW, WY + 48); ctx.stroke(); ctx.setLineDash([]);
+  const amp = 0.55 + 0.45 * sstep(0.0, 0.5, t) * (1 - sstep(0.7, 0.95, t));
+  for (const [lw, al, shift] of [[7, 0.18, 0], [2.4, 1, 0], [1.4, 0.5, 40]]) {
+    ctx.strokeStyle = `rgba(${shift ? BL : CY},${al})`; ctx.lineWidth = lw; ctx.beginPath();
+    for (let x = 0; x <= WW; x += 3) {
+      const u = (x + shift) / WW;
+      const y = WY + WH / 2 + amp * (Math.sin(TAU * (3 * u + 2 * t)) * 44 + Math.sin(TAU * (8 * u - 3 * t)) * 16 + Math.sin(TAU * (1 * u + t)) * 14);
+      x ? ctx.lineTo(WX + x, y) : ctx.moveTo(WX + x, y);
+    }
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  // 게이지
+  const GX = PX + PW - 100, GY = WY + WH / 2, GRAD = 62;
+  const gv = sstep(0.1, 0.7, t) * 0.92;
+  ctx.lineCap = 'round'; ctx.lineWidth = 10;
+  ctx.strokeStyle = 'rgba(255,255,255,0.12)'; ctx.beginPath(); ctx.arc(GX, GY, GRAD, TAU * 0.375, TAU * 1.125); ctx.stroke();
+  ctx.strokeStyle = `rgba(${gv > 0.85 ? GR : CY},${0.95 * gA + 0.05})`;
+  ctx.beginPath(); ctx.arc(GX, GY, GRAD, TAU * 0.375, TAU * (0.375 + 0.75 * gv)); ctx.stroke();
+  ctx.lineWidth = 1.5; ctx.strokeStyle = 'rgba(125,200,255,0.35)';
+  for (let k = 0; k <= 20; k++) { const a = TAU * (0.375 + 0.75 * k / 20), r1 = GRAD + 16, r2 = r1 + (k % 5 ? 5 : 10); ctx.beginPath(); ctx.moveTo(GX + Math.cos(a) * r1, GY + Math.sin(a) * r1); ctx.lineTo(GX + Math.cos(a) * r2, GY + Math.sin(a) * r2); ctx.stroke(); }
+  ctx.fillStyle = 'rgba(255,255,255,0.14)'; rr(GX - 24, GY - 6, 48, 12, 6); ctx.fill();
+
+  // 점검 항목 5개
+  ctx.globalAlpha = dim * gA;
+  const RX = PX + 34, RY = PY + 276;
+  ROW_T.forEach((t0, i) => {
+    const y = RY + i * 58, p = sstep(t0, t0 + 0.07, t), done = p >= 1;
+    // 값 자리표시 선
+    ctx.fillStyle = 'rgba(255,255,255,0.10)'; rr(RX + 50, y - 6, 300, 12, 6); ctx.fill();
+    const fg = ctx.createLinearGradient(RX + 50, 0, RX + 50 + 300 * BARW[i], 0);
+    fg.addColorStop(0, `rgba(${CY},0.95)`); fg.addColorStop(1, `rgba(${GR},0.95)`);
+    ctx.fillStyle = fg; rr(RX + 50, y - 6, Math.max(0.1, 300 * BARW[i] * p), 12, 6); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.14)'; rr(RX + 370, y - 6, 64 + (i % 3) * 14, 12, 6); ctx.fill();
+    // 원형 체크박스
+    ctx.lineWidth = 3; ctx.strokeStyle = done ? `rgba(${GR},1)` : `rgba(${CY},0.6)`;
+    ctx.fillStyle = `rgba(${GR},${0.25 * p})`; ctx.beginPath(); ctx.arc(RX + 14, y, 15, 0, TAU); ctx.fill(); ctx.stroke();
+    if (p > 0) {
+      const q = sstep(0, 1, p); ctx.strokeStyle = `rgba(${WH},${q})`; ctx.lineWidth = 3.4; ctx.lineJoin = 'round';
+      const pts = [[RX + 7, y + 1], [RX + 12, y + 7], [RX + 22, y - 6]];
+      const L1 = 7.8, L2 = 15.6, tot = L1 + L2, d = tot * q;
+      ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+      if (d <= L1) { const u = d / L1; ctx.lineTo(pts[0][0] + (pts[1][0] - pts[0][0]) * u, pts[0][1] + (pts[1][1] - pts[0][1]) * u); }
+      else { const u = (d - L1) / L2; ctx.lineTo(pts[1][0], pts[1][1]); ctx.lineTo(pts[1][0] + (pts[2][0] - pts[1][0]) * u, pts[1][1] + (pts[2][1] - pts[1][1]) * u); }
+      ctx.stroke();
     }
   });
+  // 전체 진행 바
+  const ov = sstep(0.12, 0.72, t);
+  ctx.fillStyle = 'rgba(255,255,255,0.10)'; rr(PX + 34, PY + PH - 58, PW - 68, 14, 7); ctx.fill();
+  const og = ctx.createLinearGradient(PX + 34, 0, PX + PW - 34, 0); og.addColorStop(0, `rgba(${CY},1)`); og.addColorStop(1, `rgba(${GR},1)`);
+  ctx.fillStyle = og; rr(PX + 34, PY + PH - 58, Math.max(0.1, (PW - 68) * ov), 14, 7); ctx.fill();
+  ctx.restore();
+  ctx.globalAlpha = 1;
 
-  // 입자 / 보케
-  DOTS.forEach((d) => {
-    const zc = mod(d.z - t * 3 * D, D * 3); if (zc < ZMIN || zc > ZMAX) return;
-    const p = proj(d.x, d.y, zc, cx), al = fog(zc);
-    if (p[0] < -50 || p[0] > W + 50 || p[1] < -50 || p[1] > H + 50) return;
-    if (p[2] > 2.2) glowDot(p[0], p[1], 10 + p[2] * 6, d.c, al * 0.5);
-    else { ctx.fillStyle = `rgba(${d.c},${al})`; ctx.beginPath(); ctx.arc(p[0], p[1], d.r * Math.max(0.8, p[2] * 0.8), 0, TAU); ctx.fill(); }
-  });
+  // ───── 스캔 라인 (패널 위를 한 번 통과) ─────
+  const sc = (t - 0.08) / 0.62;
+  if (sc > 0 && sc < 1) {
+    const sy = PY + 10 + sc * (PH - 20);
+    ctx.save(); rr(PX, PY, PW, PH, 26); ctx.clip(); ctx.globalCompositeOperation = 'lighter';
+    const sg = ctx.createLinearGradient(0, sy - 90, 0, sy);
+    sg.addColorStop(0, `rgba(${CY},0)`); sg.addColorStop(1, `rgba(${CY},0.28)`);
+    ctx.fillStyle = sg; ctx.fillRect(PX, sy - 90, PW, 90);
+    ctx.fillStyle = `rgba(215,245,255,0.95)`; ctx.fillRect(PX, sy - 1, PW, 2.5);
+    ctx.restore();
+  }
 
-  // 우측 코어(글자 없는 홀로그램 링)
-  const kx = 1440, ky = 470;
-  glowDot(kx, ky, 380, '59,130,246', 0.35);
-  [[210, 1, '34,211,238'], [150, -2, '168,85,247'], [96, 3, '244,114,182']].forEach(([r, f, c], i) => {
-    const pulse = 0.5 + 0.5 * Math.sin(TAU * (t * (i + 1)));
-    ctx.strokeStyle = `rgba(${c},${0.35 + 0.3 * pulse})`; ctx.lineWidth = 2.5;
-    ctx.beginPath(); ctx.arc(kx, ky, r + 6 * pulse, 0, TAU); ctx.stroke();
-    const a0 = TAU * f * t + i; ctx.lineWidth = 6; ctx.lineCap = 'round';
-    ctx.strokeStyle = `rgba(${c},0.95)`;
-    ctx.beginPath(); ctx.arc(kx, ky, r - 14, a0, a0 + TAU * 0.2); ctx.stroke();
-    ctx.lineWidth = 1; ctx.strokeStyle = `rgba(${c},0.4)`;
-    for (let k = 0; k < 40; k++) {
-      const a = (k / 40) * TAU, r1 = r - 34, r2 = r - (k % 5 ? 42 : 52);
-      ctx.beginPath(); ctx.moveTo(kx + Math.cos(a) * r1, ky + Math.sin(a) * r1); ctx.lineTo(kx + Math.cos(a) * r2, ky + Math.sin(a) * r2); ctx.stroke();
+  // ───── 인증 완료: 방패 + 체크 + 번지는 링 ─────
+  const sx = PX + PW / 2, sy2 = PY + PH / 2 - 10;
+  const q = sstep(0.74, 0.82, t) * (1 - sstep(0.93, 0.985, t));
+  if (q > 0) {
+    const sc2 = 0.55 + 0.45 * easeOutBack(sstep(0.74, 0.84, t));
+    ctx.globalCompositeOperation = 'lighter';
+    glow(sx, sy2, 340 * sc2, CY, 0.3 * q);
+    const u = clamp((t - 0.76) / 0.18);
+    for (let k = 0; k < 2; k++) {
+      const uu = clamp(u - k * 0.18); if (uu <= 0 || uu >= 1) continue;
+      ctx.strokeStyle = `rgba(${CY},${0.7 * (1 - uu) * q})`; ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.arc(sx, sy2, 120 + 260 * uu, 0, TAU); ctx.stroke();
     }
-  });
-  glowDot(kx, ky, 70, '255,255,255', 0.9);
-
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.save(); ctx.translate(sx, sy2); ctx.scale(sc2, sc2); ctx.globalAlpha = q;
+    const sh = new Path2D('M0,-130 L100,-86 V12 C100,84 48,122 0,146 C-48,122 -100,84 -100,12 V-86 Z');
+    const fg = ctx.createLinearGradient(0, -130, 0, 146); fg.addColorStop(0, 'rgba(14,60,130,0.96)'); fg.addColorStop(1, 'rgba(6,28,80,0.96)');
+    ctx.fillStyle = fg; ctx.fill(sh);
+    ctx.strokeStyle = 'rgba(235,250,255,0.98)'; ctx.lineWidth = 7; ctx.lineJoin = 'round'; ctx.stroke(sh);
+    const cp = sstep(0.8, 0.86, t);
+    if (cp > 0) {
+      const A = [-44, 6], B = [-12, 40], C = [50, -28], L1 = Math.hypot(B[0] - A[0], B[1] - A[1]), L2 = Math.hypot(C[0] - B[0], C[1] - B[1]), d = (L1 + L2) * cp;
+      ctx.strokeStyle = `rgba(${GR},1)`; ctx.shadowColor = `rgba(${GR},0.9)`; ctx.shadowBlur = 24; ctx.lineWidth = 19; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.beginPath(); ctx.moveTo(A[0], A[1]);
+      if (d <= L1) ctx.lineTo(A[0] + (B[0] - A[0]) * d / L1, A[1] + (B[1] - A[1]) * d / L1);
+      else { const v = (d - L1) / L2; ctx.lineTo(B[0], B[1]); ctx.lineTo(B[0] + (C[0] - B[0]) * v, B[1] + (C[1] - B[1]) * v); }
+      ctx.stroke(); ctx.shadowBlur = 0;
+    }
+    ctx.restore();
+  }
   ctx.globalCompositeOperation = 'source-over';
 }
 
@@ -165,16 +184,14 @@ function render(t) {
   drawScene(t);
   main.globalCompositeOperation = 'source-over'; main.filter = 'none'; main.globalAlpha = 1;
   main.drawImage(off, 0, 0);
-  // 블룸
-  main.globalCompositeOperation = 'lighter'; main.filter = 'blur(16px)'; main.globalAlpha = 0.75;
+  main.globalCompositeOperation = 'lighter'; main.filter = 'blur(14px)'; main.globalAlpha = 0.6;
   main.drawImage(off, 0, 0);
   main.filter = 'none'; main.globalAlpha = 1; main.globalCompositeOperation = 'source-over';
-  // 좌측 텍스트 가독성
-  const sh = main.createLinearGradient(0, 0, W * 0.65, 0);
-  sh.addColorStop(0, 'rgba(2,3,12,0.7)'); sh.addColorStop(1, 'rgba(2,3,12,0)');
+  const sh = main.createLinearGradient(0, 0, W * 0.62, 0);
+  sh.addColorStop(0, 'rgba(3,10,32,0.68)'); sh.addColorStop(1, 'rgba(3,10,32,0)');
   main.fillStyle = sh; main.fillRect(0, 0, W, H);
   const vg = main.createRadialGradient(W / 2, H / 2, H * 0.5, W / 2, H / 2, H * 1.1);
-  vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.45)');
+  vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.4)');
   main.fillStyle = vg; main.fillRect(0, 0, W, H);
 }
 window.render = render;

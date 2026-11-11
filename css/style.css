@@ -235,6 +235,8 @@ svg{display:block}
   .gnb .sub a{padding:8px 4px;font-weight:500;color:var(--muted)}
   .visual{padding-top:14px}
   .hero{min-height:420px;border-radius:var(--radius-md)}
+  .hero__video{object-position:78% 50%}
+  .hero::after{background:linear-gradient(0deg,rgba(4,16,42,.55),rgba(4,16,42,.55))}
   .slide{padding:0 22px}
   .ctrl{bottom:18px}.ctrl__count{display:none}
   .qs,.promo{border-radius:var(--radius-md)}
