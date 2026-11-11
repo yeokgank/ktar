@@ -113,3 +113,20 @@ body.sub{padding-top:var(--header-h)}
   .tbl th,.tbl td{padding:12px 14px;font-size:15px}
   .tbl tbody th{width:110px;white-space:normal}
 }
+
+/* ───── 2026 개편: 메인과 톤 통일 (라운드 · 카드 · 영상 포스터 배경) ───── */
+.sub-hero{background:#06142f url(../images/hero-poster.jpg) center/cover no-repeat}
+.sub-hero__inner{padding-top:72px;padding-bottom:68px}
+.sub-hero__lead{color:#c3d6f3}
+.crumbbar{background:transparent;border-bottom:0}
+.lnb h2{border-radius:var(--radius-md) var(--radius-md) 0 0}
+.lnb ul{background:#fff;border:0;border-radius:0 0 var(--radius-md) var(--radius-md);overflow:hidden;box-shadow:var(--shadow)}
+.lnb a[aria-current="page"]{box-shadow:inset 3px 0 0 var(--blue)}
+.doc .sec{background:#fff;border-radius:var(--radius-lg);padding:32px 34px;box-shadow:var(--shadow)}
+.doc .sec+.sec{margin-top:20px}
+.tbl{border-top-color:var(--navy)}
+.flow,.note,.ask{border-radius:var(--radius-md);background:#fff}
+.ask{border-left-width:1px}
+.ask a{border-radius:999px}
+.sample-note{border-radius:var(--radius-sm)}
+@media (max-width:768px){.doc .sec{padding:22px 18px;border-radius:var(--radius-md)}}

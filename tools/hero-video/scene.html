@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#04102a}canvas{display:block}</style></head>
+<body><canvas id="c" width="1920" height="1080"></canvas>
+<script>
+/* KTAR 히어로 영상 장면. render(t) 는 t∈[0,1) 에서 완전히 반복(루프)된다.
+   측정·검증을 형상화: 노드 네트워크 + 스캔 라인 + 게이지 링 + 막대 지표. 모두 자체 제작. */
+const W = 1920, H = 1080, TAU = Math.PI * 2;
+const ctx = document.getElementById('c').getContext('2d');
+
+// 의사난수 (고정 시드 → 매 실행 동일)
+let seed = 7;
+const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+
+const NODES = Array.from({ length: 70 }, () => ({
+  x: rnd() * W, y: rnd() * H,
+  ax: 20 + rnd() * 50, ay: 20 + rnd() * 50,
+  fx: 1 + Math.floor(rnd() * 2), fy: 1 + Math.floor(rnd() * 2),
+  px: rnd() * TAU, py: rnd() * TAU,
+  r: 1.5 + rnd() * 2.5,
+}));
+const BARS = Array.from({ length: 22 }, (_, i) => ({
+  x: 1120 + i * 34, base: 0.25 + rnd() * 0.6, f: 1 + Math.floor(rnd() * 3), p: rnd() * TAU,
+}));
+const RINGS = [
+  { x: 1380, y: 400, r: 190, f: 1 },
+  { x: 1380, y: 400, r: 130, f: 2 },
+  { x: 520, y: 720, r: 120, f: 1 },
+];
+
+function pos(n, t) {
+  return [n.x + n.ax * Math.sin(TAU * n.fx * t + n.px), n.y + n.ay * Math.cos(TAU * n.fy * t + n.py)];
+}
+
+function render(t) {
+  // 배경
+  const g = ctx.createLinearGradient(0, 0, W, H);
+  g.addColorStop(0, '#04102a'); g.addColorStop(0.55, '#0a2a5e'); g.addColorStop(1, '#0b4a8f');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+  // 광원
+  const gl = ctx.createRadialGradient(1380, 400, 0, 1380, 400, 700);
+  gl.addColorStop(0, 'rgba(56,189,248,0.38)'); gl.addColorStop(1, 'rgba(56,189,248,0)');
+  ctx.fillStyle = gl; ctx.fillRect(0, 0, W, H);
+
+  // 격자 (천천히 이동, 1칸 = 80px → 반복)
+  ctx.strokeStyle = 'rgba(125,190,255,0.10)'; ctx.lineWidth = 1;
+  const off = (t * 80) % 80;
+  for (let x = -80 + off; x < W + 80; x += 80) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (let y = -80 + off; y < H + 80; y += 80) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+  // 네트워크 연결선
+  const P = NODES.map((n) => pos(n, t));
+  for (let i = 0; i < P.length; i++) for (let j = i + 1; j < P.length; j++) {
+    const d = Math.hypot(P[i][0] - P[j][0], P[i][1] - P[j][1]);
+    if (d < 230) {
+      ctx.strokeStyle = `rgba(120,200,255,${(1 - d / 230) * 0.38})`;
+      ctx.beginPath(); ctx.moveTo(P[i][0], P[i][1]); ctx.lineTo(P[j][0], P[j][1]); ctx.stroke();
+    }
+  }
+  P.forEach((p, i) => {
+    ctx.fillStyle = 'rgba(190,230,255,0.9)';
+    ctx.beginPath(); ctx.arc(p[0], p[1], NODES[i].r, 0, TAU); ctx.fill();
+  });
+
+  // 게이지 링
+  RINGS.forEach((rg) => {
+    const pulse = 0.5 + 0.5 * Math.sin(TAU * rg.f * t);
+    ctx.strokeStyle = `rgba(103,214,255,${0.25 + 0.3 * pulse})`; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(rg.x, rg.y, rg.r + 8 * pulse, 0, TAU); ctx.stroke();
+    const a0 = TAU * (rg.f * t);
+    ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.arc(rg.x, rg.y, rg.r - 14, a0, a0 + TAU * 0.22); ctx.stroke();
+    ctx.strokeStyle = 'rgba(103,214,255,0.25)'; ctx.lineWidth = 1;
+    for (let k = 0; k < 48; k++) {
+      const a = (k / 48) * TAU, r1 = rg.r - 34, r2 = rg.r - (k % 4 ? 42 : 50);
+      ctx.beginPath(); ctx.moveTo(rg.x + Math.cos(a) * r1, rg.y + Math.sin(a) * r1);
+      ctx.lineTo(rg.x + Math.cos(a) * r2, rg.y + Math.sin(a) * r2); ctx.stroke();
+    }
+  });
+
+  // 막대 지표
+  BARS.forEach((b) => {
+    const h = 260 * (b.base * 0.7 + 0.3 * (0.5 + 0.5 * Math.sin(TAU * b.f * t + b.p)));
+    const bg = ctx.createLinearGradient(0, 940 - h, 0, 940);
+    bg.addColorStop(0, 'rgba(125,211,252,0.55)'); bg.addColorStop(1, 'rgba(37,99,235,0.08)');
+    ctx.fillStyle = bg; ctx.fillRect(b.x, 940 - h, 18, h);
+  });
+  ctx.strokeStyle = 'rgba(125,190,255,0.35)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(1100, 940); ctx.lineTo(1880, 940); ctx.stroke();
+
+  // 스캔 라인 (좌→우 1회 / 루프)
+  const sx = (t * (W + 400)) - 200;
+  const sg = ctx.createLinearGradient(sx - 160, 0, sx, 0);
+  sg.addColorStop(0, 'rgba(103,214,255,0)'); sg.addColorStop(1, 'rgba(103,214,255,0.22)');
+  ctx.fillStyle = sg; ctx.fillRect(sx - 160, 0, 160, H);
+  ctx.fillStyle = 'rgba(190,240,255,0.7)'; ctx.fillRect(sx, 0, 2, H);
+
+  // 좌측 가독성을 위한 어둡게 처리 (텍스트 영역)
+  const sh = ctx.createLinearGradient(0, 0, W * 0.7, 0);
+  sh.addColorStop(0, 'rgba(4,16,42,0.62)'); sh.addColorStop(1, 'rgba(4,16,42,0)');
+  ctx.fillStyle = sh; ctx.fillRect(0, 0, W, H);
+
+  // 필름 그레인 대신 약한 비네팅
+  const vg = ctx.createRadialGradient(W / 2, H / 2, H * 0.5, W / 2, H / 2, H * 1.1);
+  vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.35)');
+  ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+}
+window.render = render;
+render(0);
+</script></body></html>

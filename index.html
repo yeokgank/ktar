@@ -7,7 +7,7 @@
 <meta name="description" content="KTAR 한국시험평가원 – 시험·인증·고객지원 서비스 안내 및 견적 문의">
 <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body id="top">
 
 <!-- 아이콘 스프라이트 -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -25,6 +25,8 @@
     <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
     <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
     <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H10l-4 4v-4H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   </defs>
 </svg>
 
@@ -32,12 +34,6 @@
 <div class="topbar">
   <div class="topbar__inner">
     <a href="#" class="topbar__notice"><b>공지</b><span>2026년 하반기 시험·인증 접수 일정 및 수수료 안내</span><time>2026-11-01</time></a>
-    <div class="ctrl" aria-label="슬라이드 제어">
-      <button type="button" data-act="prev" aria-label="이전">&#8249;</button>
-      <button type="button" data-act="toggle" aria-label="일시정지" class="ctrl__toggle">&#10074;&#10074;</button>
-      <button type="button" data-act="next" aria-label="다음">&#8250;</button>
-      <span class="ctrl__count"><b id="cur">1</b> / 3</span>
-    </div>
   </div>
 </div>
 
@@ -82,60 +78,109 @@
 </header>
 
 <main>
-  <!-- ① 메인 비주얼 슬라이드 + ② 주요 서비스 바로가기 -->
-  <section class="visual" aria-roledescription="carousel" aria-label="메인 비주얼">
-    <div class="slides">
-      <article class="slide is-active">
-        <div class="slide__txt">
-          <p class="slide__sub">신뢰할 수 있는 시험·평가의 기준</p>
-          <h1>한국시험평가원</h1>
-          <p class="slide__en">Korea Testing &amp; Assessment Research</p>
+  <!-- ① 메인 비주얼(영상 슬라이드 3장) + ② 주요 서비스 바로가기 -->
+  <section class="visual">
+    <div class="inner visual__grid">
+      <div class="hero" aria-roledescription="carousel" aria-label="메인 비주얼">
+        <video class="hero__video" autoplay muted loop playsinline preload="metadata" poster="images/hero-poster.jpg" aria-hidden="true">
+          <source src="video/hero.mp4" type="video/mp4">
+        </video>
+        <div class="slides">
+          <article class="slide is-active">
+            <div class="slide__txt">
+              <p class="slide__sub">신뢰할 수 있는 시험·평가의 기준</p>
+              <h1>한국시험평가원</h1>
+              <p class="slide__en">Korea Testing &amp; Assessment Research</p>
+            </div>
+          </article>
+          <article class="slide">
+            <div class="slide__txt">
+              <p class="slide__sub">준비부터 취득 이후까지 원스톱 지원</p>
+              <h2>인증 서비스</h2>
+              <p class="slide__en">Certification Service</p>
+            </div>
+          </article>
+          <article class="slide">
+            <div class="slide__txt">
+              <p class="slide__sub">빠르고 정확한 견적·상담</p>
+              <h2>고객과 함께합니다</h2>
+              <p class="slide__en">Customer Support</p>
+            </div>
+          </article>
         </div>
-      </article>
-      <article class="slide">
-        <div class="slide__txt">
-          <p class="slide__sub">준비부터 취득 이후까지 원스톱 지원</p>
-          <h2>인증 서비스</h2>
-          <p class="slide__en">Certification Service</p>
+        <div class="ctrl" aria-label="슬라이드 제어">
+          <button type="button" data-act="prev" aria-label="이전">&#8249;</button>
+          <button type="button" data-act="toggle" aria-label="일시정지" class="ctrl__toggle">&#10074;&#10074;</button>
+          <button type="button" data-act="next" aria-label="다음">&#8250;</button>
+          <span class="ctrl__count"><b id="cur">1</b> / 3</span>
         </div>
-      </article>
-      <article class="slide">
-        <div class="slide__txt">
-          <p class="slide__sub">빠르고 정확한 견적·상담</p>
-          <h2>고객과 함께합니다</h2>
-          <p class="slide__en">Customer Support</p>
+      </div>
+
+      <nav class="qs" aria-label="주요 서비스 바로가기">
+        <h2>빠른 서비스</h2>
+        <div class="qs__tabs" role="tablist">
+          <button type="button" role="tab" aria-selected="true" data-tab="0">시험</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="1">인증</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="2">안내</button>
         </div>
-      </article>
+        <ul class="qs__panel is-active" data-panel="0">
+          <li><a href="test/certified.html"><span class="qs__ic"><svg><use href="#i-test"/></svg></span>공인시험</a></li>
+          <li><a href="test/vv.html"><span class="qs__ic"><svg><use href="#i-verify"/></svg></span>일반시험(V&amp;V)</a></li>
+        </ul>
+        <ul class="qs__panel" data-panel="1">
+          <li><a href="cert/gs.html"><span class="qs__ic"><svg><use href="#i-cert"/></svg></span>GS인증</a></li>
+          <li><a href="cert/kc.html"><span class="qs__ic"><svg><use href="#i-report"/></svg></span>KC인증</a></li>
+          <li><a href="cert/cloud.html"><span class="qs__ic"><svg><use href="#i-cloud"/></svg></span>클라우드서비스확인제</a></li>
+        </ul>
+        <ul class="qs__panel" data-panel="2">
+          <li><a href="about/intro.html"><span class="qs__ic"><svg><use href="#i-building"/></svg></span>기관 소개</a></li>
+          <li><a href="about/location.html"><span class="qs__ic"><svg><use href="#i-map"/></svg></span>오시는 길</a></li>
+          <li><a href="#inquiry"><span class="qs__ic"><svg><use href="#i-quote"/></svg></span>견적 문의</a></li>
+        </ul>
+      </nav>
+
+      <a href="#inquiry" class="promo"><b>견적 문의</b><span>문의 내용을 남겨주시면 담당자가 확인 후 연락드립니다.</span><i aria-hidden="true">&#8599;</i></a>
     </div>
-
-    <nav class="quick" aria-label="주요 서비스 바로가기">
-      <ul class="quick__grid">
-        <li><a href="test/certified.html"><svg><use href="#i-test"/></svg>공인시험</a></li>
-        <li><a href="test/vv.html"><svg><use href="#i-verify"/></svg>일반시험(V&amp;V)</a></li>
-        <li><a href="cert/gs.html"><svg><use href="#i-cert"/></svg>GS인증</a></li>
-        <li><a href="cert/kc.html"><svg><use href="#i-report"/></svg>KC인증</a></li>
-        <li><a href="cert/cloud.html"><svg><use href="#i-cloud"/></svg>클라우드서비스확인제</a></li>
-        <li><a href="about/intro.html"><svg><use href="#i-building"/></svg>기관 소개</a></li>
-        <li><a href="about/location.html"><svg><use href="#i-map"/></svg>오시는 길</a></li>
-        <li><a href="#inquiry"><svg><use href="#i-quote"/></svg>견적 문의</a></li>
-      </ul>
-    </nav>
-
-    <aside class="float" aria-label="빠른 메뉴">
-      <a href="#inquiry" class="float__a">견적<br>문의</a>
-      <a href="#inquiry" class="float__b">QUICK</a>
-    </aside>
   </section>
 
-  <!-- ③ 회사소개 요약 -->
-  <section class="about">
-    <div class="inner about__inner">
-      <div>
-        <p class="eyebrow">ABOUT KTAR</p>
-        <h2>공정한 시험과 평가로<br><em>신뢰</em>를 만드는 기관</h2>
-        <p class="about__text">KTAR 한국시험평가원은 전문성과 공정성을 바탕으로 시험·평가 서비스를 제공합니다. 고객의 제품과 서비스가 신뢰받을 수 있도록 정확한 결과와 신속한 대응으로 함께합니다.</p>
-        <a href="about/intro.html" class="more">회사소개 자세히 보기 <span>→</span></a>
+  <!-- ③ 주요 서비스 카드 -->
+  <section class="svc">
+    <div class="inner">
+      <div class="sec-head">
+        <p class="eyebrow">SERVICE</p>
+        <h2>시험부터 인증까지,<br>필요한 서비스를 바로 확인하세요</h2>
       </div>
+      <div class="svc__grid">
+        <article class="svc__card svc__card--dark">
+          <p class="svc__tag">TEST</p>
+          <h3>시험</h3>
+          <p>공인된 기준과 절차에 따라 수행하고 공식 성적서를 발급합니다.</p>
+          <div class="svc__links">
+            <a href="test/certified.html">공인시험</a>
+            <a href="test/vv.html">일반시험(V&amp;V)</a>
+          </div>
+        </article>
+        <article class="svc__card">
+          <p class="svc__tag">CERTIFICATION</p>
+          <h3>인증</h3>
+          <p>소프트웨어·제품·클라우드 서비스의 품질과 안전성을 확인하고 인증을 지원합니다.</p>
+          <div class="svc__links">
+            <a href="cert/gs.html">GS인증</a>
+            <a href="cert/kc.html">KC인증</a>
+            <a href="cert/cloud.html">클라우드서비스확인제</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ④ 회사소개 요약 -->
+  <section class="about">
+    <div class="inner">
+      <p class="about__label">ABOUT KTAR</p>
+      <h2>공정한 시험과 평가로<br><em>신뢰</em>를 만드는 기관</h2>
+      <p class="about__text">KTAR 한국시험평가원은 전문성과 공정성을 바탕으로 시험·평가 서비스를 제공합니다. 고객의 제품과 서비스가 신뢰받을 수 있도록 정확한 결과와 신속한 대응으로 함께합니다.</p>
+      <a href="about/intro.html" class="more">회사소개 자세히 보기 <span>→</span></a>
       <dl class="about__facts">
         <div><dt>기관명</dt><dd>한국시험평가원</dd></div>
         <div><dt>영문명</dt><dd>Korea Testing &amp; Assessment Research</dd></div>
@@ -146,7 +191,7 @@
     </div>
   </section>
 
-  <!-- ④ 견적 문의 폼 -->
+  <!-- ⑤ 견적 문의 폼 -->
   <section class="inquiry" id="inquiry">
     <div class="inner inquiry__inner">
       <div class="inquiry__head">
@@ -196,6 +241,11 @@
     </div>
   </div>
 </footer>
+
+<aside class="float" aria-label="빠른 메뉴">
+  <a href="#inquiry" class="float__a" aria-label="견적 문의"><svg><use href="#i-chat"/></svg></a>
+  <a href="#top" class="float__b" aria-label="맨 위로"><svg><use href="#i-up"/></svg></a>
+</aside>
 
 <script src="js/main.js"></script>
 <script src="js/nav.js"></script>

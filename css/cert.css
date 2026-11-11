@@ -143,3 +143,12 @@
   .cs{padding:52px 0}
   .kh{margin-bottom:28px}
 }
+
+/* ───── 2026 개편: 라운드 통일 ───── */
+.ph{background:#06142f url(../images/hero-poster.jpg) center/cover no-repeat}
+.btn{border-radius:999px}
+.gain li,.proc li{border-radius:var(--radius-md);border-top-width:1px;box-shadow:var(--shadow)}
+.cmp-wrap,.docs__col,.proc-ban,.contact__tel{border-radius:var(--radius-md)}
+.proc-ban a{border-radius:999px}
+.proc__no{border-radius:12px}
+.atab__sw a{border-radius:999px}
