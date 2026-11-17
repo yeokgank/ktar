@@ -220,8 +220,8 @@ svg{display:block}
 }
 @media (max-width:1100px){
   .gnb ul{gap:26px}.header__inner{gap:24px}
-  .visual__grid{grid-template-columns:1fr;grid-template-rows:auto}
-  .hero{grid-row:auto;height:auto;aspect-ratio:16 / 9;min-height:480px}
+  .visual__grid{grid-template-columns:minmax(0,1fr);grid-template-rows:auto}
+  .hero{grid-row:auto;width:100%;min-width:0;height:auto;aspect-ratio:16 / 9;min-height:480px}
   .qs__panel{grid-template-columns:repeat(3,1fr)}
   .svc__grid{grid-template-columns:repeat(2,1fr)}
   .steps{grid-template-columns:repeat(3,1fr)}
@@ -253,7 +253,7 @@ svg{display:block}
   .slide{padding:0 22px}
   .ctrl{bottom:18px}.ctrl__count{display:none}
   .qs,.promo{border-radius:var(--radius-md)}
-  .qs__panel{grid-template-columns:repeat(2,1fr)}
+  .qs__panel{grid-template-columns:repeat(2,minmax(0,1fr))}
   .svc{padding:56px 0 24px}
   .svc__grid,.values__grid{grid-template-columns:1fr}
   .svc__card{padding:26px 22px 22px;min-height:0}
@@ -270,6 +270,10 @@ svg{display:block}
   .float{right:14px;bottom:14px}.float a{width:52px;height:52px}
   .footer__body{flex-direction:column;align-items:flex-start;gap:16px}
   .footer__links{flex-wrap:wrap;gap:14px 22px}
+}
+/* 좁은 폰(≤420px): 큰 아이콘 + 메뉴명이 2열에 들어가지 않아 1열 */
+@media (max-width:420px){
+  .qs__panel{grid-template-columns:minmax(0,1fr)}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
