@@ -5,19 +5,20 @@
 import re
 
 import gen_cert
-from gen_cert import HEAD, TAIL, who
+from gen_cert import HEAD, TAIL
+
+DOCS_NOTE = "서류 양식은 견적문의 후 담당자가 메일로 보내드립니다."
+SAMPLE_NOTE = ('<div class="sample-wrap"><div class="inner"><p class="sample-note">'
+               "※ 본 페이지의 문구·수치는 시안용 샘플입니다. 실제 내용 확정 후 교체됩니다.</p></div></div>\n")
+
+
+def who(roles):
+    """KTAR 이 맡는 역할(KTAR, KTAR 지원 등)은 강조 칩으로 표시."""
+    return '<div class="who">' + "".join(
+        f'<i class="{"me" if r.startswith("KTAR") else ""}">{r}</i>' for r in roles) + "</div>"
 
 SWITCH = [("공인시험", "certified"), ("일반시험(V&V)", "vv")]
 EXTRA_E = "&amp;"
-
-# 모든 문구·수치는 시안용 샘플 (실제 인정 번호·실적은 확정 후 기재)
-STEPS_COMMON = [
-    ("견적 확인", "견적문의로 의뢰하시면 시험 가능 여부와 견적을 확인해 안내합니다.", ["KTAR"]),
-    ("계약 진행", "견적 확인 후 시험 계약을 체결합니다.", ["의뢰자", "KTAR"]),
-    ("시험 접수", "시험 대상(실행 파일 · 접속 정보 · 시료)과 관련 자료를 접수합니다.", ["의뢰자"]),
-    ("신청서·절차서 제출", "시험신청서와 시험절차서를 작성해 제출합니다.", ["의뢰자", "KTAR"]),
-    ("시험 진행", "시험절차서에 따라 시험을 수행하고 중간 결과를 공유합니다.", ["KTAR"]),
-]
 
 PAGES = {
     "certified": dict(
@@ -53,28 +54,46 @@ PAGES = {
         cmp_note="시험 가능 항목 및 적용 규격은 시험 목적과 의뢰 조건에 따라 검토되며, "
                  "공인시험 여부는 해당 시험기관의 KOLAS 인정 범위를 기준으로 확인합니다.<br>"
                  "※ 본 표는 KTAR의 지원 가능 분야에 대한 안내이며, KTAR 자체의 KOLAS 인정 범위를 의미하지 않습니다.",
-        proc_title="접수 전에 범위를 확정합니다.<br>그래서 성적서가 한 번에 나옵니다.",
-        last_step=("성적서 발급", "결과를 검토한 뒤 공식 성적서를 발급합니다.", ["KTAR"]),
-        docs_title="기업이 준비할 것",
-        docs_lead="제출처가 요구하는 항목이 적힌 자료를 먼저 보내 주세요.",
-        docs_you=[("과제 계획서 · 요건 자료", "정량 목표 부분만 가능"), ("시험 대상 (실행파일 · 접속 정보 · 시료)", "시험용"),
-                  ("제품 사양서 · 기능 설명서", "있는 대로"), ("사업자등록증", "신청서 첨부")],
-        cta_title="계획서의 정량적 목표 항목만 보내주시면<br>영업일 3일 내 가능 여부와 견적을 안내합니다",
-        cta_lead="협약서 발췌본이면 충분합니다. 시험 가능 여부, 견적, 성적서 발급 예정일을 항목별로 정리해 드립니다.",
+        proc_title="시험 상담부터 성적서 발급까지<br>체계적으로 지원합니다",
+        proc_lead="KTAR은 시험 의뢰 과정에서 필요한 실무 절차를 지원하고, 협력 시험기관과의 원활한 업무 진행을 돕습니다.",
+        steps=[("시험 상담 및 견적 검토", "시험 대상 및 요구사항을 확인하고 시험 가능 여부와 예상 비용을 검토하여 안내합니다.", ["KTAR"]),
+               ("시험 계약", "시험 범위와 견적을 확정한 후 계약 절차를 진행합니다.", ["의뢰자", "계약 당사자"]),
+               ("시험자료 접수", "시험에 필요한 제품, 실행파일, 데이터셋 및 관련 기술자료를 접수합니다.", ["의뢰자", "KTAR 지원"]),
+               ("시험신청서 및 절차서 준비", "시험기관의 제출 기준에 따라 필요한 서류와 시험절차서 작성을 지원합니다.",
+                ["KTAR", "의뢰자", "협력 시험기관"]),
+               ("시험평가 수행", "확정된 시험절차에 따라 전문 시험기관에서 시험평가를 실시하며, KTAR은 진행 일정과 관련 협의를 지원합니다.",
+                ["협력 시험기관", "KTAR 진행 지원"]),
+               ("시험성적서 발급", "시험기관에서 시험 결과를 검토하고 해당 기관 명의로 성적서를 발급합니다. KTAR은 발급 일정 확인 및 전달 절차를 지원합니다.",
+                ["협력 시험기관", "KTAR 발급 지원"])],
+        docs_title="시험평가 진행 시 필요한 준비자료",
+        docs_lead="시험 대상과 정량적 평가 항목을 확인할 수 있는 자료를 준비해 주시면 시험 가능 여부 및 진행 절차 검토에 도움이 됩니다.",
+        docs_desc=True,
+        docs_you=[("연구개발계획서", "정량적 목표 및 시험평가 관련 내용"),
+                  ("시험 대상", "실행파일, 접속 정보, 시료, 데이터셋 등"),
+                  ("제품 사양서 및 기능 설명서", "시험 대상의 주요 기능과 기술적 특성 확인"),
+                  ("사업자등록증", "계약 및 시험 신청 시 필요"),
+                  ("시험신청서", "시험기관별 양식에 따라 별도 안내")],
+        docs_note="시험에 필요한 서류는 평가 항목 및 시험기관에 따라 달라질 수 있으며, 상담 후 담당자가 상세하게 안내드립니다.",
+        cta_title="시험평가가 필요하신가요?<br>KTAR이 함께 검토하겠습니다",
+        cta_lead=["기업의 시험 목적과 평가 항목을 확인하여 적합한 시험기관 및 진행 방법을 안내해 드립니다. "
+                  "기업명, 담당자 연락처 및 문의사항을 남겨주시면 담당자가 확인 후 연락드립니다.",
+                  "견적 검토에 필요한 자료는 별도로 안내하며, 접수 후 영업일 기준 3일 이내 견적 안내를 목표로 합니다."],
+        cta_note="※ 시험기관의 추가 검토가 필요한 경우 회신 일정이 조정될 수 있습니다.",
+        sample=False,
     ),
     "vv": dict(
         title="일반시험(V&V)",
         lead="",
-        h1="규격에 없는 항목도,<br><em>의뢰자 제시 방법</em>에 맞춰 시험합니다",
-        desc="고객 요구에 맞춰 시험 항목과 방법을 설계하고 시험 결과 보고서를 발급합니다.",
+        h1="규격에 없는 항목도,<br><em>의뢰자 제시 방법</em>에 맞춰 시험을 지원합니다",
+        desc="고객 요구에 맞춰 시험 항목과 방법을 검토하고, 협력 시험기관의 시험 수행과 결과서 발급을 지원합니다.",
         facts=[("대상", "소프트웨어 · ICT 제품 · 데이터 · 정보시스템 전 분야"),
-               ("방법", "의뢰자 제시 항목·방법 또는 KTAR이 설계한 시험 절차"),
-               ("결과서", "일반 시험성적서 · 시험 결과 보고서"),
+               ("방법", "의뢰자 제시 항목·방법 기반, KTAR이 시험 절차 검토 지원"),
+               ("결과서", "시험 수행기관 명의의 일반 시험성적서 · 시험 결과 보고서"),
                ("회신", "영업일 3일 이내 시험 가능 여부 · 견적 · 발급 예정일"),
                ("소요", "접수 후 1~3주 (항목 수에 따라 조정)")],
         gain_title="일반시험(V&V)이 맞는 여섯 가지 상황",
         gain_lead="공식 규격으로 담기 어려운 항목, 빠른 회신이 필요한 상황에 적합합니다. 공인 성적서가 필수인지 먼저 확인해 드립니다.",
-        gains=[("발주처 규격서의 고유 요건", "납품 규격서의 성능·기능 요건을 그대로 항목화해 검수용 결과서를 만듭니다."),
+        gains=[("발주처 규격서의 고유 요건", "납품 규격서의 성능·기능 요건을 그대로 항목화해 검수용 시험 결과를 확보합니다."),
                ("과제 계획서의 특수 지표", "공식 규격에 없는 정량 목표를 의뢰자 제시 방법으로 측정합니다."),
                ("인증 접수 전 자체 검증", "제3자 시각으로 기능·성능을 점검해 결함을 인증 접수 전에 걸러냅니다."),
                ("성능 · 부하 측정", "응답시간 · 처리량 · 동시 사용자 · 자원 사용률을 시나리오로 측정합니다."),
@@ -91,13 +110,22 @@ PAGES = {
                   ("적합한 경우", "검수 · 자체 검증 · 특수 지표 · 사전 시험 · R&D 과제평가", "과제 평가 · 조달 · 인증 준비 · R&D 과제평가")],
         cmp_note="※ 공식 성적서가 요구되는 평가에는 일반 시험성적서가 인정되지 않을 수 있습니다. 상담 시 요건을 먼저 확인합니다.",
         proc_title="영업일 3일 안에<br>가능 여부부터 알려드립니다",
-        last_step=("결과서 발급", "결과를 검토한 뒤 시험 결과 보고서를 발급합니다.", ["KTAR"]),
+        steps=[("견적 확인", "견적문의로 의뢰하시면 시험 가능 여부와 견적을 확인해 안내합니다.", ["KTAR"]),
+               ("계약 진행", "견적 확인 후 시험 계약을 체결합니다.", ["의뢰자", "계약 당사자"]),
+               ("시험 접수", "시험 대상(실행 파일 · 접속 정보 · 시료)과 관련 자료를 접수합니다.", ["의뢰자", "KTAR 지원"]),
+               ("신청서·절차서 제출", "시험신청서와 시험절차서 작성을 지원하고 시험기관에 제출합니다.",
+                ["KTAR", "의뢰자", "협력 시험기관"]),
+               ("시험 진행", "시험절차서에 따라 협력 시험기관이 시험을 수행하며, KTAR은 일정 조율과 중간 결과 공유를 지원합니다.",
+                ["협력 시험기관", "KTAR 진행 지원"]),
+               ("결과서 발급", "시험기관이 결과를 검토한 뒤 해당 기관 명의로 시험 결과 보고서를 발급합니다. KTAR은 발급 일정 확인과 전달을 지원합니다.",
+                ["협력 시험기관", "KTAR 발급 지원"])],
         docs_title="기업이 준비할 것",
         docs_lead="시험하고 싶은 항목이 적힌 자료면 어떤 형식이든 좋습니다. 규격서, 계획서, 메일 본문도 괜찮습니다.",
         docs_you=[("시험 항목 · 요건 자료", "형식 무관"), ("시험 대상 (실행파일 · 접속 정보 · 시료)", "시험용"),
                   ("제품 사양서 · 사용자 설명서", "있는 대로"), ("사업자등록증", "신청서 첨부")],
         cta_title="시험하고 싶은 항목만 적어 보내주시면<br>영업일 3일 내 가능 여부와 견적을 안내합니다",
         cta_lead="규격서나 계획서 일부, 메일 본문으로도 충분합니다. 시험 가능 여부, 견적, 결과서 발급 예정일을 함께 회신합니다.",
+        sample=False,
     ),
 }
 
@@ -141,7 +169,15 @@ def build(slug, repo):
     gains = "".join(f'<li><span class="gain__no">{n:02d}</span><b>{esc(a)}</b><span>{esc(b)}</span></li>'
                     for n, (a, b) in enumerate(d["gains"], 1))
     gain_note = f'<p class="cmp-note">{esc(d["gain_note"])}</p>' if d.get("gain_note") else ""
-    steps_src = STEPS_COMMON + [d["last_step"]]
+    steps_src = d["steps"]
+    proc_lead = f'<p>{esc(d["proc_lead"])}</p>' if d.get("proc_lead") else ""
+    leads = d["cta_lead"] if isinstance(d["cta_lead"], list) else [d["cta_lead"]]
+    cta_lead = "".join(f"<p>{esc(x)}</p>" for x in leads)
+    if d.get("cta_note"):
+        cta_lead += f'<p class="contact__note">{esc(d["cta_note"])}</p>'
+    docs_cls = "docs__col docs__col--desc" if d.get("docs_desc") else "docs__col"
+    docs_note = esc(d.get("docs_note", DOCS_NOTE))
+    sample = SAMPLE_NOTE if d.get("sample", True) else ""
     steps = "".join(
         f'<li class="{"k" if len(r) == 1 and r[0] == "KTAR" else ""}"><span class="proc__no">{n}</span><b>{esc(a)}</b><p>{esc(b)}</p>{who(r)}</li>'
         for n, (a, b, r) in enumerate(steps_src, 1))
@@ -196,7 +232,7 @@ def build(slug, repo):
 
   <section class="cs" id="proc">
     <div class="inner">
-      <div class="kh"><p class="kh__label">PROCESS</p><h2>{d["proc_title"]}</h2></div>
+      <div class="kh"><p class="kh__label">PROCESS</p><h2>{d["proc_title"]}</h2>{proc_lead}</div>
       <div class="proc-ban"><b>진행 방식이 궁금하시면 <em>견적문의</em>로 먼저 남겨 주세요.</b><a href="../index.html#inquiry">견적문의</a></div>
       <ol class="proc">{steps}</ol>
     </div>
@@ -206,9 +242,9 @@ def build(slug, repo):
     <div class="inner">
       <div class="kh"><p class="kh__label">DOCUMENTS</p><h2>{esc(d["docs_title"])}</h2><p>{esc(d["docs_lead"])}</p></div>
       <div class="docs docs--one">
-        <div class="docs__col"><h3>기업<small>준비</small></h3><ul>{you}</ul></div>
+        <div class="{docs_cls}"><h3>기업<small>준비</small></h3><ul>{you}</ul></div>
       </div>
-      <p class="docs-note">서류 양식은 견적문의 후 담당자가 메일로 보내드립니다.</p>
+      <p class="docs-note">{docs_note}</p>
     </div>
   </section>
 
@@ -217,7 +253,7 @@ def build(slug, repo):
       <div>
         <p class="kh__label">CONTACT</p>
         <h2>{d["cta_title"]}</h2>
-        <p>{esc(d["cta_lead"])}</p>
+        {cta_lead}
       </div>
       <div class="contact__side">
         <div class="contact__tel">대표전화<b>00-0000-0000</b></div>
@@ -226,8 +262,7 @@ def build(slug, repo):
     </div>
   </section>
 
-  <div class="sample-wrap"><div class="inner"><p class="sample-note">※ 본 페이지의 문구·수치는 시안용 샘플입니다. 실제 내용 확정 후 교체됩니다.</p></div></div>
-</main>'''
+{sample}</main>'''
     path = f"{repo}/test/{slug}.html"
     with open(path, "w", encoding="utf-8") as f:
         f.write(head_for(slug) + main + TAIL)

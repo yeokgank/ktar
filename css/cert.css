@@ -109,6 +109,9 @@
 .docs__col li{display:flex;justify-content:space-between;gap:16px;padding:16px 26px;font-size:15.5px;color:#2c3750}
 .docs__col li+li{border-top:1px solid var(--line)}
 .docs__col li span{flex:none;color:var(--muted);font-size:14px}
+.docs__col--desc li{flex-direction:column;gap:4px}
+.docs__col--desc li span{flex:auto}
+.contact p.contact__note{font-size:14px;color:#9fb3d6}
 .docs-note{margin-top:16px;font-size:14px;color:var(--muted)}
 
 /* 문의 */
