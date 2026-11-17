@@ -16,6 +16,8 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 svg{display:block}
 :focus-visible{outline:3px solid var(--sky);outline-offset:2px}
 .inner{width:100%;max-width:1280px;margin:0 auto;padding:0 32px}
+/* 메인 와이드 컨테이너: 콘텐츠 1520px + 좌우 40px (메인 비주얼 ~ 견적 문의 공통) */
+.inner--wide{max-width:1600px;padding:0 40px}
 .eyebrow{display:flex;align-items:center;gap:10px;color:var(--blue);font-weight:800;letter-spacing:.16em;font-size:13.5px;margin-bottom:16px}
 .eyebrow::before{content:"";width:22px;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--navy) 0 14px,var(--sky) 14px)}
 
@@ -60,9 +62,10 @@ svg{display:block}
 .gnb .sub a:hover{background:var(--bg);color:var(--blue)}
 
 /* ───── 메인 히어로: 영상 카드 + 빠른 서비스 ───── */
-.visual{padding:28px 0 0}
-.visual__grid{display:grid;grid-template-columns:minmax(0,2.35fr) minmax(0,1fr);grid-template-rows:auto auto;gap:18px}
-.hero{position:relative;grid-row:1 / span 2;min-height:560px;border-radius:var(--radius-lg);overflow:hidden;background:#04102a;color:#fff;isolation:isolate}
+/* 영상 16:9 + 우측 410px 고정 열 */
+.visual{padding:50px 0 0}
+.visual__grid{display:grid;grid-template-columns:minmax(0,1fr) 410px;grid-template-rows:auto auto;gap:24px}
+.hero{position:relative;grid-row:1 / span 2;align-self:stretch;aspect-ratio:16 / 9;min-height:560px;border-radius:var(--radius-lg);overflow:hidden;background:#04102a;color:#fff;isolation:isolate}
 .hero__video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
 .hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(4,16,42,.7),rgba(4,16,42,0) 45%)}
 .slides{position:absolute;inset:0}
@@ -205,6 +208,10 @@ svg{display:block}
 .footer__copy{margin-top:8px;opacity:.6}
 
 /* ───── responsive ───── */
+@media (max-width:1399px){
+  .inner--wide{padding:0 32px}
+  .visual__grid{gap:16px}
+}
 @media (max-width:1100px){
   .gnb ul{gap:26px}.header__inner{gap:24px}
   .visual__grid{grid-template-columns:1fr}
