@@ -164,6 +164,7 @@ svg{display:block}
 .more:hover{background:var(--cyan)}
 .more:hover span{transform:translateX(5px)}
 .about__facts{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:64px;text-align:left}
+.about__facts--3{grid-template-columns:repeat(3,1fr)}
 .about__facts>div{padding:22px 22px 24px;border-radius:var(--radius-md);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(6px)}
 .about__facts dt{color:#8fb0e0;font-size:13.5px;margin-bottom:8px}
 .about__facts dd{font-size:16px;font-weight:700;line-height:1.5;word-break:keep-all}
@@ -188,6 +189,9 @@ svg{display:block}
 .form__agree{display:flex!important;align-items:center;gap:8px;font-weight:400!important;color:var(--muted)}
 .form__agree input{flex:none!important;width:18px;height:18px;accent-color:var(--navy)}
 .form__agree a{text-decoration:underline;color:var(--blue)}
+.form__msg{padding:12px 16px;border-radius:var(--radius-md);background:#e9f1fc;color:var(--navy);font-size:15px;font-weight:700}
+.form__msg.is-error{background:#fdecec;color:#c62828}
+.form__note{font-size:14px;line-height:1.6;color:var(--muted);word-break:keep-all}
 .submit{padding:18px;border-radius:999px;background:var(--navy);color:#fff;font-weight:800;font-size:17px;transition:background .2s}
 .submit:hover{background:var(--blue)}
 

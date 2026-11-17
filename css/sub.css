@@ -130,3 +130,5 @@ body.sub{padding-top:var(--header-h)}
 .ask a{border-radius:999px}
 .sample-note{border-radius:var(--radius-sm)}
 @media (max-width:768px){.doc .sec{padding:22px 18px;border-radius:var(--radius-md)}}
+/* 대표 사진 비노출 시 인사말 1열 */
+.greet--solo{grid-template-columns:1fr}
