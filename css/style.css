@@ -63,9 +63,11 @@ svg{display:block}
 
 /* ───── 메인 히어로: 영상 카드 + 빠른 서비스 ───── */
 /* 영상 16:9 + 우측 410px 고정 열 */
-.visual{padding:50px 0 0}
-.visual__grid{display:grid;grid-template-columns:minmax(0,1fr) 410px;grid-template-rows:auto auto;gap:24px}
-.hero{position:relative;grid-row:1 / span 2;align-self:stretch;aspect-ratio:16 / 9;min-height:560px;border-radius:var(--radius-lg);overflow:hidden;background:#04102a;color:#fff;isolation:isolate}
+.visual{padding:50px 0 24px}
+/* 영상 높이 = 화면 높이 - 공지띠·헤더(118) - 위아래 여백(50+24), 560~680px.
+   상한 680px이어도 주요 서비스 위 여백(88px)이 남아 1080 화면에서 본문은 스크롤해야 보인다 */
+.visual__grid{display:grid;grid-template-columns:minmax(0,1fr) 410px;grid-template-rows:1fr auto;gap:24px}
+.hero{position:relative;grid-row:1 / span 2;align-self:stretch;height:clamp(560px,calc(100svh - 192px),680px);border-radius:var(--radius-lg);overflow:hidden;background:#04102a;color:#fff;isolation:isolate}
 .hero__video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
 .hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(4,16,42,.7),rgba(4,16,42,0) 45%)}
 .slides{position:absolute;inset:0}
@@ -86,17 +88,17 @@ svg{display:block}
 .ctrl__count{position:absolute;left:calc(100% + 16px);color:#dbe9ff;font-size:13px;white-space:nowrap}
 .ctrl__count b{color:#fff}
 
-.qs{background:var(--card);border-radius:var(--radius-lg);padding:26px 24px 22px;box-shadow:var(--shadow)}
+.qs{display:flex;flex-direction:column;background:var(--card);border-radius:var(--radius-lg);padding:26px 24px 22px;box-shadow:var(--shadow)}
 .qs h2{font-size:18px;font-weight:800;color:var(--navy);margin-bottom:14px}
 .qs__tabs{display:flex;gap:18px;border-bottom:1px solid var(--line);margin-bottom:18px}
 .qs__tabs button{position:relative;padding:8px 2px 12px;font-size:15px;font-weight:700;color:#9aa6ba;transition:color .2s}
 .qs__tabs button[aria-selected="true"]{color:var(--navy)}
 .qs__tabs button[aria-selected="true"]::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--navy)}
-.qs__panel{display:none;grid-template-columns:repeat(2,1fr);gap:14px 10px}
-.qs__panel.is-active{display:grid}
-.qs__panel a{display:flex;flex-direction:column;align-items:center;gap:10px;padding:8px 4px;font-size:13.5px;font-weight:600;text-align:center;word-break:keep-all;color:var(--text);transition:color .2s}
-.qs__ic{display:grid;place-items:center;width:56px;height:56px;border-radius:14px;background:#e9f1fc;color:var(--blue);transition:background .2s,color .2s,transform .25s var(--ease)}
-.qs__ic svg{width:30px;height:30px}
+.qs__panel{display:none;grid-template-columns:1fr;gap:10px}
+.qs__panel.is-active{display:grid;align-content:start}
+.qs__panel a{display:flex;align-items:center;gap:16px;padding:6px 4px;font-size:16px;font-weight:700;text-align:left;word-break:keep-all;color:var(--text);transition:color .2s}
+.qs__ic{display:grid;place-items:center;flex:none;width:68px;height:68px;border-radius:16px;background:#e9f1fc;color:var(--blue);transition:background .2s,color .2s,transform .25s var(--ease)}
+.qs__ic svg{width:36px;height:36px}
 .qs__panel a:hover{color:var(--blue)}
 .qs__panel a:hover .qs__ic{background:var(--blue);color:#fff;transform:translateY(-3px)}
 
@@ -214,8 +216,8 @@ svg{display:block}
 }
 @media (max-width:1100px){
   .gnb ul{gap:26px}.header__inner{gap:24px}
-  .visual__grid{grid-template-columns:1fr}
-  .hero{grid-row:auto;min-height:480px}
+  .visual__grid{grid-template-columns:1fr;grid-template-rows:auto}
+  .hero{grid-row:auto;height:auto;aspect-ratio:16 / 9;min-height:480px}
   .qs__panel{grid-template-columns:repeat(3,1fr)}
   .svc__grid{grid-template-columns:repeat(2,1fr)}
   .steps{grid-template-columns:repeat(3,1fr)}
