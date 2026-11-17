@@ -60,9 +60,10 @@ svg{display:block}
 .gnb .sub a:hover{background:var(--bg);color:var(--blue)}
 
 /* ───── 메인 히어로: 영상 카드 + 빠른 서비스 ───── */
-.visual{padding:28px 0 0}
-.visual__grid{display:grid;grid-template-columns:minmax(0,2.35fr) minmax(0,1fr);grid-template-rows:auto auto;gap:18px}
-.hero{position:relative;grid-row:1 / span 2;min-height:560px;border-radius:var(--radius-lg);overflow:hidden;background:#04102a;color:#fff;isolation:isolate}
+/* 진입 시 첫 화면을 꽉 채움: 뷰포트 - 탑바 - 헤더 */
+.visual{--visual-h:calc(100svh - var(--topbar-h) - var(--header-h));height:var(--visual-h);min-height:600px;padding:24px 0}
+.visual__grid{max-width:1600px;height:100%;display:grid;grid-template-columns:minmax(0,2.35fr) minmax(0,1fr);grid-template-rows:1fr auto;gap:18px}
+.hero{position:relative;grid-row:1 / span 2;min-height:0;border-radius:var(--radius-lg);overflow:hidden;background:#04102a;color:#fff;isolation:isolate}
 .hero__video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
 .hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(4,16,42,.7),rgba(4,16,42,0) 45%)}
 .slides{position:absolute;inset:0}
@@ -208,7 +209,9 @@ svg{display:block}
 @media (max-width:1100px){
   .gnb ul{gap:26px}.header__inner{gap:24px}
   .visual__grid{grid-template-columns:1fr}
-  .hero{grid-row:auto;min-height:480px}
+  .visual{height:auto;min-height:0;padding-bottom:0}
+  .visual__grid{height:auto;grid-template-rows:auto}
+  .hero{grid-row:auto;min-height:calc(var(--visual-h) - 48px)}
   .qs__panel{grid-template-columns:repeat(3,1fr)}
   .svc__grid{grid-template-columns:repeat(2,1fr)}
   .steps{grid-template-columns:repeat(3,1fr)}
@@ -234,7 +237,7 @@ svg{display:block}
   .gnb .sub{justify-content:start;justify-items:start;position:static;transform:none;opacity:1;visibility:visible;box-shadow:none;padding:0 0 12px 12px;min-width:0}
   .gnb .sub a{padding:8px 4px;font-weight:500;color:var(--muted)}
   .visual{padding-top:14px}
-  .hero{min-height:420px;border-radius:var(--radius-md)}
+  .hero{min-height:calc(var(--visual-h) - 28px);border-radius:var(--radius-md)}
   .hero__video{object-position:78% 50%}
   .hero::after{background:linear-gradient(0deg,rgba(4,16,42,.55),rgba(4,16,42,.55))}
   .slide{padding:0 22px}
