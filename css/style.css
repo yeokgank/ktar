@@ -3,7 +3,7 @@
   --navy:#0b2150; --navy-deep:#06142f; --blue:#1a6fd1; --sky:#35a1ee; --cyan:#67d6ff;
   --bg:#eef3f8; --card:#fff; --text:#1c2433; --muted:#5d6b82; --line:#dfe5ef;
   --radius-lg:24px; --radius-md:16px; --radius-sm:10px;
-  --topbar-h:38px; --header-h:80px; --ease:cubic-bezier(.22,.61,.36,1);
+  --topbar-h:38px; --header-h:100px; --ease:cubic-bezier(.22,.61,.36,1);
   --shadow:0 10px 30px rgba(11,33,80,.08);
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -35,7 +35,7 @@ svg{display:block}
 .header.is-solid,.header.is-stuck{box-shadow:0 2px 16px rgba(11,33,80,.1)}
 .header__inner{height:100%;max-width:1280px;margin:0 auto;padding:0 32px;display:flex;align-items:center;gap:48px}
 .logo{position:relative;display:block;flex:none}
-.logo img{height:52px;width:auto}
+.logo img{height:85px;width:auto}
 .logo__white{display:none!important}
 .logo__color{position:static!important;opacity:1!important}
 .gnb{flex:1}
