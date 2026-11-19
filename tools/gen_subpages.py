@@ -211,7 +211,7 @@ def build(key, g_key, page_no):
         f'<li><a href="../{g_key}/{slug}.html"' + (' aria-current="page"' if slug == cur else "") + f">{esc(name)}</a></li>"
         for name, slug in items)
     main = f'''<main>
-  <section class="sub-hero">
+  <section class="sub-hero sub-hero--{cur}">
     <div class="inner sub-hero__inner">
       <h1>{esc(d['title'])}</h1>
       <p class="sub-hero__lead">{d['lead']}</p>

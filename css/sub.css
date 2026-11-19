@@ -132,3 +132,8 @@ body.sub{padding-top:var(--header-h)}
 @media (max-width:768px){.doc .sec{padding:22px 18px;border-radius:var(--radius-md)}}
 /* 대표 사진 비노출 시 인사말 1열 */
 .greet--solo{grid-template-columns:1fr}
+
+/* ───── 페이지별 히어로 이미지 (홈페이지 이미지 반영) ───── */
+.sub-hero{--sh-shade:linear-gradient(rgba(6,20,47,.66),rgba(6,20,47,.66))}
+.sub-hero--intro{background:var(--sh-shade),#06142f url(../images/sub/about-intro.jpg) center/cover no-repeat}
+.sub-hero--location{background:var(--sh-shade),#06142f url(../images/sub/about-location.jpg) center/cover no-repeat}

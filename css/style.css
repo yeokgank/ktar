@@ -279,3 +279,6 @@ svg{display:block}
   html{scroll-behavior:auto}
   .slide,.slide__txt>*,.svc__card,.qs__ic{transition:none}
 }
+
+/* ───── 견적 문의: 고객지원 이미지 ───── */
+.inquiry__tel{background:linear-gradient(rgba(11,33,80,.82),rgba(11,33,80,.82)),var(--navy) url(../images/sub/support.jpg) center/cover no-repeat}

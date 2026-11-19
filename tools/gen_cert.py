@@ -203,7 +203,7 @@ def build(slug, repo):
     note = "" if slug == "cloud" else f'<p class="contact__note">{CERT_COMMON_NOTE}</p>'
 
     main = f'''<main class="cp">
-  <section class="ph">
+  <section class="ph ph--{slug}">
     <div class="inner ph__inner">
       <ol class="crumb" aria-label="현재 위치">
         <li><a href="../index.html">홈</a></li>

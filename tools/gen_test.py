@@ -200,7 +200,7 @@ def build(slug, repo):
     proc_ban = esc(d["proc_ban"]) if d.get("proc_ban") else "진행 방식이 궁금하시면 <em>견적문의</em>로 먼저 남겨 주세요."
 
     main = f'''<main class="cp">
-  <section class="ph">
+  <section class="ph ph--{slug}">
     <div class="inner ph__inner">
       <ol class="crumb" aria-label="현재 위치">
         <li><a href="../index.html">홈</a></li>
