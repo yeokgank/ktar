@@ -29,17 +29,6 @@
     if (act === 'toggle') setPlaying(!playing);
   });
 
-  // 빠른 서비스 탭
-  var tabs = document.querySelectorAll('.qs__tabs button');
-  var panels = document.querySelectorAll('.qs__panel');
-  tabs.forEach(function (t) {
-    t.addEventListener('click', function () {
-      var n = t.getAttribute('data-tab');
-      tabs.forEach(function (b) { b.setAttribute('aria-selected', b === t ? 'true' : 'false'); });
-      panels.forEach(function (p) { p.classList.toggle('is-active', p.getAttribute('data-panel') === n); });
-    });
-  });
-
   function onScroll() { header.classList.toggle('is-stuck', window.scrollY > 60); }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();

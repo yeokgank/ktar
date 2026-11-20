@@ -78,33 +78,37 @@
 </header>
 
 <main>
-  <!-- ① 메인 비주얼(영상 슬라이드 3장) + ② 주요 서비스 바로가기 -->
+  <!-- ① 메인 비주얼(이미지 슬라이드 4장) + ② 주요 서비스 바로가기 -->
   <section class="visual">
     <div class="inner inner--wide visual__grid">
       <div class="hero" aria-roledescription="carousel" aria-label="메인 비주얼">
-        <video class="hero__video" autoplay muted loop playsinline preload="metadata" poster="images/hero-poster.jpg" aria-hidden="true">
-          <source src="video/hero.mp4" type="video/mp4">
-        </video>
         <div class="slides">
-          <article class="slide is-active">
+          <article class="slide slide--1 is-active">
             <div class="slide__txt">
               <p class="slide__sub">시험기관 연계부터 결과서 발급 절차까지</p>
               <h1>KTAR 한국시험평가원</h1>
               <p class="slide__en">Testing &amp; Assessment Support</p>
             </div>
           </article>
-          <article class="slide">
+          <article class="slide slide--2">
             <div class="slide__txt">
               <p class="slide__sub">정부 R&amp;D 과제의 정량적 성과 검증 지원</p>
               <h2>시험평가 기술 서비스</h2>
               <p class="slide__en">R&amp;D Testing Support</p>
             </div>
           </article>
-          <article class="slide">
+          <article class="slide slide--3">
             <div class="slide__txt">
               <p class="slide__sub">시험항목 검토부터 견적 안내까지</p>
               <h2>기업과 함께하는 시험평가</h2>
               <p class="slide__en">Technical Service Partner</p>
+            </div>
+          </article>
+          <article class="slide slide--4">
+            <div class="slide__txt">
+              <p class="slide__sub">GS·KC·클라우드서비스확인제 인증 절차 지원</p>
+              <h2>인증 준비부터 심사 대응까지</h2>
+              <p class="slide__en">Certification Support</p>
             </div>
           </article>
         </div>
@@ -112,27 +116,18 @@
           <button type="button" data-act="prev" aria-label="이전">&#8249;</button>
           <button type="button" data-act="toggle" aria-label="일시정지" class="ctrl__toggle">&#10074;&#10074;</button>
           <button type="button" data-act="next" aria-label="다음">&#8250;</button>
-          <span class="ctrl__count"><b id="cur">1</b> / 3</span>
+          <span class="ctrl__count"><b id="cur">1</b> / 4</span>
         </div>
       </div>
 
       <nav class="qs" aria-label="주요 서비스 바로가기">
         <h2>빠른 서비스</h2>
-        <div class="qs__tabs" role="tablist">
-          <button type="button" role="tab" aria-selected="true" data-tab="0">시험</button>
-          <button type="button" role="tab" aria-selected="false" data-tab="1">인증</button>
-          <button type="button" role="tab" aria-selected="false" data-tab="2">안내</button>
-        </div>
-        <ul class="qs__panel is-active" data-panel="0">
+        <ul class="qs__grid">
           <li><a href="test/certified.html"><span class="qs__ic"><svg><use href="#i-test"/></svg></span>공인시험</a></li>
           <li><a href="test/vv.html"><span class="qs__ic"><svg><use href="#i-verify"/></svg></span>일반시험(V&amp;V)</a></li>
-        </ul>
-        <ul class="qs__panel" data-panel="1">
           <li><a href="cert/gs.html"><span class="qs__ic"><svg><use href="#i-cert"/></svg></span>GS인증</a></li>
           <li><a href="cert/kc.html"><span class="qs__ic"><svg><use href="#i-report"/></svg></span>KC인증</a></li>
           <li><a href="cert/cloud.html"><span class="qs__ic"><svg><use href="#i-cloud"/></svg></span>클라우드서비스확인제</a></li>
-        </ul>
-        <ul class="qs__panel" data-panel="2">
           <li><a href="about/intro.html"><span class="qs__ic"><svg><use href="#i-building"/></svg></span>기관 소개</a></li>
           <li><a href="about/location.html"><span class="qs__ic"><svg><use href="#i-map"/></svg></span>오시는 길</a></li>
           <li><a href="#inquiry"><span class="qs__ic"><svg><use href="#i-quote"/></svg></span>견적 문의</a></li>
