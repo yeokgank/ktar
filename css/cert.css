@@ -55,8 +55,6 @@
 .cs{padding:88px 0;scroll-margin-top:calc(var(--header-h) + 56px)}
 .cs--bg{background:var(--bg)}
 .kh{margin-bottom:40px}
-.kh__label{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:13.5px;font-weight:700;letter-spacing:.14em;color:var(--blue)}
-.kh__label::before{content:"";width:22px;height:8px;background:linear-gradient(90deg,var(--navy) 0 14px,var(--sky) 14px)}
 .kh h2{font-size:clamp(26px,3vw,36px);line-height:1.35;font-weight:800;letter-spacing:-.025em;color:var(--navy)}
 .kh p{margin-top:14px;max-width:720px;font-size:17px;line-height:1.8;color:var(--muted)}
 
@@ -117,8 +115,6 @@
 /* 문의 */
 .contact{background:#0b2150 url(../images/about-bg.svg) center/cover no-repeat;color:#fff;padding:72px 0}
 .contact__inner{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:48px;align-items:center}
-.contact .kh__label{color:var(--sky)}
-.contact .kh__label::before{background:linear-gradient(90deg,#fff 0 14px,var(--sky) 14px)}
 .contact h2{font-size:clamp(24px,2.8vw,34px);line-height:1.4;font-weight:800;letter-spacing:-.025em}
 .contact p{margin-top:14px;color:#c3d3ec;font-size:16.5px;line-height:1.8}
 .contact__side{display:grid;gap:12px;min-width:280px}

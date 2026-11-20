@@ -34,7 +34,7 @@ PAGES = {
                ("출시 전 품질 점검", "인증 신청 전 제품 기능, 사용설명서, 시험환경 등 준비사항을 점검합니다."),
                ("인증 신청 서류 준비", "제품 설명자료 및 시험에 필요한 문서의 누락 여부를 확인합니다."),
                ("보완 요청 대응", "인증 과정에서 발생하는 보완 요구와 일정 변경사항을 관리합니다.")],
-        cmp_label="GRADE", cmp_title="GS인증 등급별 적용 기준을 확인하세요",
+        cmp_title="GS인증 등급별 적용 기준을 확인하세요",
         cmp_lead="GS인증 등급과 시험범위는 해당 인증제도 및 인증기관의 적용 기준에 따라 정해집니다. 제품에 필요한 등급과 세부 시험항목을 사전 검토합니다.",
         cmp_head=["항목", "1등급", "2등급"], cmp_rec=0,
         cmp_rows=[("평가 기준", "해당 인증기관의 1등급 적용 기준", "해당 인증기관의 2등급 적용 기준"),
@@ -81,7 +81,7 @@ PAGES = {
                ("수입 제품 적용 검토", "해외 제조·수입 제품의 국내 적용 요건과 필요한 시험·서류를 검토합니다."),
                ("무선·통신 기능 검토", "Wi-Fi·Bluetooth 등 무선 기능이 있는 제품의 방송통신기자재 적합성평가 해당 여부를 확인합니다."),
                ("R&D 시제품 상용화", "개발 제품의 양산·유통을 앞두고 적용되는 KC 절차와 예상 준비사항을 검토합니다.")],
-        cmp_label="TYPE", cmp_title="KC 적용 제도,<br>제품 유형에 따라 달라집니다",
+        cmp_title="KC 적용 제도,<br>제품 유형에 따라 달라집니다",
         cmp_lead="전기용품의 안전관리 절차와 방송통신기자재 적합성평가는 서로 다른 제도입니다. 실제 적용 여부는 제품의 용도와 기술 사양을 기준으로 확인합니다.",
         cmp_head=["비교 항목", "안전인증", "안전확인", "공급자적합성확인"], cmp_rec=0,
         cmp_rows=[("적용 대상", "관련 법령에서 안전인증 대상으로 지정한 제품", "관련 법령에서 안전확인 대상으로 지정한 제품", "관련 법령에서 공급자적합성확인 대상으로 지정한 제품"),
@@ -127,7 +127,7 @@ PAGES = {
                ("운영관리 체계 정리", "장애 대응, 변경관리 및 운영절차와 관련된 증빙을 정리합니다."),
                ("평가·확인 절차 대응", "해당 기관의 신청 요건과 제출 절차를 확인해 진행을 지원합니다."),
                ("보완사항 관리", "관련 기관의 보완 요청사항을 정리하고 제출 일정을 관리합니다.")],
-        cmp_label="SCOPE", cmp_title="평가·확인 준비 시 검토하는 주요 영역",
+        cmp_title="평가·확인 준비 시 검토하는 주요 영역",
         cmp_lead="아래는 일반적인 사전 검토 영역이며, 실제 심사·확인 항목은 적용 제도와 담당기관 기준에 따라 확정됩니다.",
         cmp_head=["영역", "검토 내용", "준비 자료 예시"], cmp_rec=0,
         cmp_rows=[("서비스 품질", "서비스 제공 수준 및 안정성 관련 자료 확인", "SLA·서비스 운영 현황"),
@@ -235,14 +235,14 @@ def build(slug, repo):
 
   <section class="cs" id="gain">
     <div class="inner">
-      <div class="kh"><p class="kh__label">BENEFIT</p><h2>{d["gain_title"]}</h2><p>{d["gain_lead"]}</p></div>
+      <div class="kh"><h2>{d["gain_title"]}</h2><p>{d["gain_lead"]}</p></div>
       <ol class="gain">{gains}</ol>
     </div>
   </section>
 
   <section class="cs cs--bg" id="cmp">
     <div class="inner">
-      <div class="kh"><p class="kh__label">{d["cmp_label"]}</p><h2>{d["cmp_title"]}</h2><p>{d["cmp_lead"]}</p></div>
+      <div class="kh"><h2>{d["cmp_title"]}</h2><p>{d["cmp_lead"]}</p></div>
       <div class="cmp-wrap"><table class="cmp"><thead><tr>{heads}</tr></thead><tbody>{rows}</tbody></table></div>
       <p class="cmp-note">{d["cmp_note"]}</p>
     </div>
@@ -250,7 +250,7 @@ def build(slug, repo):
 
   <section class="cs" id="proc">
     <div class="inner">
-      <div class="kh"><p class="kh__label">PROCESS</p><h2>{d["proc_title"]}</h2></div>
+      <div class="kh"><h2>{d["proc_title"]}</h2></div>
       <div class="proc-ban"><b>{d["proc_ban"]}</b><a href="../index.html#inquiry">견적문의</a></div>
       <ol class="proc">{steps}</ol>
     </div>
@@ -258,7 +258,7 @@ def build(slug, repo):
 
   <section class="cs cs--bg" id="docs">
     <div class="inner">
-      <div class="kh"><p class="kh__label">DOCUMENTS</p><h2>{d["docs_title"]}</h2><p>{d["docs_lead"]}</p></div>
+      <div class="kh"><h2>{d["docs_title"]}</h2><p>{d["docs_lead"]}</p></div>
       <div class="docs">
         <div class="docs__col"><h3>기업<small>준비</small></h3><ul>{you}</ul></div>
         <div class="docs__col me"><h3>KTAR<small>지원</small></h3><ul>{me}</ul></div>
@@ -270,7 +270,6 @@ def build(slug, repo):
   <section class="contact" id="contact">
     <div class="inner contact__inner">
       <div>
-        <p class="kh__label">CONTACT</p>
         <h2>{d["cta_title"]}</h2>
         <p>{d["cta_lead"]}</p>
         {note}

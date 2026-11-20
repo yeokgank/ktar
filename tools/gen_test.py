@@ -42,7 +42,7 @@ PAGES = {
                ("기술 홍보 및 사업화", "객관적인 시험평가 결과를 제품 소개서, 기술제안서 및 영업자료 등에 활용하여 제품의 기술적 신뢰도를 높일 수 있습니다."),
                ("해외시장 진출", "해외 거래처 또는 발주기관이 요구하는 시험자료를 준비하고, 필요한 경우 국제 상호인정 체계가 적용되는 공인시험 진행을 지원합니다.")],
         gain_note="※ 시험성적서의 활용 및 인정 여부는 제출기관별 요구조건에 따라 달라질 수 있습니다.",
-        cmp_label="SCOPE", cmp_title="시험 목적에 맞는 평가 분야를 안내합니다",
+        cmp_title="시험 목적에 맞는 평가 분야를 안내합니다",
         cmp_lead="KTAR은 기업의 시험 목적과 평가 항목을 검토하여 적합한 시험기관을 연계합니다. "
                  "공인시험이 필요한 경우 협력 시험기관의 인정 범위를 확인하여 진행하며, "
                  "그 외 항목은 일반시험(V&V) 가능 여부를 별도로 검토합니다.",
@@ -99,7 +99,7 @@ PAGES = {
                ("납품·검수 요건 대응", "발주처 및 납품처가 요구하는 시험항목과 결과 문서의 적합성을 검토합니다."),
                ("제품·서비스 성능 확인", "제품의 사용조건과 검증 목적에 맞춰 시험항목 및 측정 조건을 협의합니다."),
                ("공인시험 전 사전 확인", "공인시험 접수 전 내부 또는 외부 시험을 통한 성능 확인 필요성을 검토합니다.")],
-        cmp_label="COMPARE", cmp_title="공인시험과 일반시험, 제출 목적에 맞게 선택하세요",
+        cmp_title="공인시험과 일반시험, 제출 목적에 맞게 선택하세요",
         cmp_lead="공인성적서 제출이 필요한지, 협의된 시험방법을 활용할 수 있는지에 따라 적합한 시험 형태가 달라집니다.",
         cmp_head=["항목", "일반시험(V&V)", "공인시험"], cmp_rec=0,
         cmp_rows=[("시험 기준", "의뢰자 제시 항목 및 협의된 시험방법", "시험기관 인정범위 내 규격·절차"),
@@ -232,7 +232,7 @@ def build(slug, repo):
 
   <section class="cs" id="gain">
     <div class="inner">
-      <div class="kh"><p class="kh__label">USE CASE</p><h2>{esc(d["gain_title"])}</h2><p>{esc(d["gain_lead"])}</p></div>
+      <div class="kh"><h2>{esc(d["gain_title"])}</h2><p>{esc(d["gain_lead"])}</p></div>
       <ol class="gain">{gains}</ol>
       {gain_note}
     </div>
@@ -240,7 +240,7 @@ def build(slug, repo):
 
   <section class="cs cs--bg" id="cmp">
     <div class="inner">
-      <div class="kh"><p class="kh__label">{d["cmp_label"]}</p><h2>{esc(d["cmp_title"])}</h2><p>{esc(d["cmp_lead"])}</p></div>
+      <div class="kh"><h2>{esc(d["cmp_title"])}</h2><p>{esc(d["cmp_lead"])}</p></div>
       {cmp_table(d)}
       <p class="cmp-note">{esc(d["cmp_note"])}</p>
     </div>
@@ -248,7 +248,7 @@ def build(slug, repo):
 
   <section class="cs" id="proc">
     <div class="inner">
-      <div class="kh"><p class="kh__label">PROCESS</p><h2>{d["proc_title"]}</h2>{proc_lead}</div>
+      <div class="kh"><h2>{d["proc_title"]}</h2>{proc_lead}</div>
       <div class="proc-ban"><b>{proc_ban}</b><a href="../index.html#inquiry">견적문의</a></div>
       <ol class="proc">{steps}</ol>
     </div>
@@ -256,7 +256,7 @@ def build(slug, repo):
 
   <section class="cs cs--bg" id="docs">
     <div class="inner">
-      <div class="kh"><p class="kh__label">DOCUMENTS</p><h2>{esc(d["docs_title"])}</h2><p>{esc(d["docs_lead"])}</p></div>
+      <div class="kh"><h2>{esc(d["docs_title"])}</h2><p>{esc(d["docs_lead"])}</p></div>
       {docs_html}
       <p class="docs-note">{docs_note}</p>
     </div>
@@ -265,7 +265,6 @@ def build(slug, repo):
   <section class="contact" id="contact">
     <div class="inner contact__inner">
       <div>
-        <p class="kh__label">CONTACT</p>
         <h2>{d["cta_title"]}</h2>
         {cta_lead}
       </div>
