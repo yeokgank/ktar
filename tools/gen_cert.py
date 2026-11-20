@@ -211,7 +211,6 @@ def build(slug, repo):
         <li aria-current="page">{t}</li>
       </ol>
       <div>
-        <p class="eyebrow">CERTIFICATION</p>
         <h1>{d["h1"]}</h1>
         <p class="ph__lead">{d["lead"]}</p>
         <div class="ph__cta">

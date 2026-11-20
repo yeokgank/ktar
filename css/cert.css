@@ -11,8 +11,6 @@
 .ph .crumb li+li::before{color:#5d7cae}
 .ph .crumb a:hover{color:#fff}
 .ph .crumb [aria-current]{color:#fff}
-.eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:18px;font-size:13.5px;font-weight:700;letter-spacing:.14em;color:var(--sky)}
-.eyebrow::before{content:"";width:22px;height:8px;background:linear-gradient(90deg,#fff 0 14px,var(--sky) 14px)}
 .ph h1{font-size:clamp(32px,4.2vw,52px);line-height:1.28;font-weight:800;letter-spacing:-.03em}
 .ph h1 em{font-style:normal;color:var(--sky)}
 .ph__lead{margin-top:20px;max-width:520px;color:#c3d3ec;font-size:17px;line-height:1.8}

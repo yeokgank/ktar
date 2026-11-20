@@ -18,8 +18,6 @@ svg{display:block}
 .inner{width:100%;max-width:1280px;margin:0 auto;padding:0 32px}
 /* 메인 와이드 컨테이너: 콘텐츠 1520px + 좌우 40px (메인 비주얼 ~ 견적 문의 공통) */
 .inner--wide{max-width:1600px;padding:0 40px}
-.eyebrow{display:flex;align-items:center;gap:10px;color:var(--blue);font-weight:800;letter-spacing:.16em;font-size:13.5px;margin-bottom:16px}
-.eyebrow::before{content:"";width:22px;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--navy) 0 14px,var(--sky) 14px)}
 
 /* topbar (공지) */
 .topbar{height:var(--topbar-h);background:var(--navy-deep);color:#cfdcf2;font-size:13px}
@@ -169,7 +167,7 @@ svg{display:block}
 .inquiry{padding:104px 0 112px}
 .inquiry__inner{display:grid;grid-template-columns:1fr 1.6fr;gap:56px;align-items:start}
 .inquiry h2{font-size:clamp(30px,3.4vw,46px);color:var(--navy);font-weight:800;letter-spacing:-.03em;margin-bottom:18px}
-.inquiry__head>p:not(.eyebrow){color:var(--muted);font-size:17px}
+.inquiry__head>p{color:var(--muted);font-size:17px}
 .inquiry__tel{margin-top:36px;padding:26px 28px;border-radius:var(--radius-md);background:var(--navy);color:#c3d3ec!important;display:grid;gap:2px}
 .inquiry__tel b{font-size:30px;color:#fff;letter-spacing:.02em}
 .inquiry__tel small{color:#8fa6cc}

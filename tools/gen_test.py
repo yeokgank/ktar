@@ -208,7 +208,6 @@ def build(slug, repo):
         <li aria-current="page">{t}</li>
       </ol>
       <div>
-        <p class="eyebrow">TEST</p>
         <h1>{d["h1"].replace("&", "&amp;")}</h1>
         {lead_html}
         <div class="ph__cta">
