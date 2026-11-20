@@ -278,10 +278,10 @@ svg{display:block}
 
 /* ───── 메인 비주얼: 영상 대신 슬라이드별 이미지 (메인_이미지 1~4) ───── */
 .slide{--slide-shade:linear-gradient(90deg,rgba(4,16,42,.82) 0%,rgba(4,16,42,.5) 50%,rgba(4,16,42,.15) 100%);background:#04102a center/cover no-repeat}
-.slide--1{background-image:var(--slide-shade),url(../images/main/slide1.jpg)}
-.slide--2{background-image:var(--slide-shade),url(../images/main/slide2.jpg)}
-.slide--3{background-image:var(--slide-shade),url(../images/main/slide3.jpg)}
-.slide--4{background-image:var(--slide-shade),url(../images/main/slide4.jpg)}
+.slide--1{background-image:var(--slide-shade),url(../images/main/slide1.jpg?v=20261120)}
+.slide--2{background-image:var(--slide-shade),url(../images/main/slide2.jpg?v=20261120)}
+.slide--3{background-image:var(--slide-shade),url(../images/main/slide3.jpg?v=20261120)}
+.slide--4{background-image:var(--slide-shade),url(../images/main/slide4.jpg?v=20261120)}
 @media (max-width:768px){
   .slide{--slide-shade:linear-gradient(rgba(4,16,42,.6),rgba(4,16,42,.6))}
 }
@@ -291,7 +291,7 @@ svg{display:block}
 .about::after{content:"";position:absolute;inset:-20px;z-index:-2;background:url(../images/sub/about-intro.jpg) center/cover no-repeat;opacity:.22;filter:blur(3px) saturate(.8)}
 /* 견적 문의(밝은 배경): 고객지원 이미지를 아주 옅게 */
 .inquiry{position:relative;isolation:isolate;overflow:hidden}
-.inquiry::before{content:"";position:absolute;inset:-20px;z-index:-1;background:url(../images/main/inquiry.jpg) right center/cover no-repeat;opacity:.15;filter:blur(4px) grayscale(.3)}
+.inquiry::before{content:"";position:absolute;inset:-20px;z-index:-1;background:url(../images/main/inquiry.jpg?v=20261120) right center/cover no-repeat;opacity:.15;filter:blur(4px) grayscale(.3)}
 
 /* ───── 메인 비주얼 배경: 옅은 테크 격자 + 하늘색 빛 번짐 ───── */
 .visual{position:relative;isolation:isolate;overflow:hidden}
