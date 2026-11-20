@@ -291,7 +291,7 @@ svg{display:block}
 .about::after{content:"";position:absolute;inset:-20px;z-index:-2;background:url(../images/sub/about-intro.jpg) center/cover no-repeat;opacity:.22;filter:blur(3px) saturate(.8)}
 /* 견적 문의(밝은 배경): 고객지원 이미지를 아주 옅게 */
 .inquiry{position:relative;isolation:isolate;overflow:hidden}
-.inquiry::before{content:"";position:absolute;inset:-20px;z-index:-1;background:url(../images/sub/support.jpg) right center/cover no-repeat;opacity:.08;filter:blur(4px) grayscale(.3)}
+.inquiry::before{content:"";position:absolute;inset:-20px;z-index:-1;background:url(../images/sub/support.jpg) right center/cover no-repeat;opacity:.15;filter:blur(4px) grayscale(.3)}
 
 /* ───── 메인 비주얼 배경: 옅은 테크 격자 + 하늘색 빛 번짐 ───── */
 .visual{position:relative;isolation:isolate;overflow:hidden}
