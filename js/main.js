@@ -37,6 +37,46 @@
   // 견적 문의 폼: 필수 항목 검사 + 접수 전송.
   // 접수 저장·담당자 전달 엔드포인트는 form[data-endpoint] 로 지정한다(미지정 시 전송하지 않음).
   var form = document.getElementById('inquiryForm');
+
+  // 문의 내용 안내 양식: 문의 분야에 따라 placeholder 교체(참고용, 필수 아님).
+  // 입력란에 들어가면 숨기고, 비운 채로 나가면 다시 보인다. 분야를 바꿔도 작성 내용은 유지된다.
+  var GUIDES = {
+    certified: ['1. 정부 R&D 과제명 :', '2. 시험 대상 제품 및 기술 :', '3. 과제 종료일 :', '4. 정량적 목표항목 및 목표치 :',
+      '5. 시험 장비 보유 여부 (교정 여부 포함) :', '6. 성적서 발급 희망일 :', '7. 기타 문의사항 :'],
+    vv: ['1. 정부 R&D 과제명 :', '2. 시험 대상 제품 및 기술 :', '3. 과제 종료일 :', '4. 시험 희망 항목 및 목표치 :',
+      '5. 시험 장비 보유 여부 (교정 여부 포함) :', '6. 성적서 발급 희망일 :', '7. 기타 문의사항 :'],
+    kc: ['1. 제품명 및 모델명 :', '2. 제품 용도 및 주요 사양 :', '3. 국내 제조 / 해외 수입 여부 :',
+      '4. 기존 시험성적서 및 인증서 보유 여부 :', '5. 인증 완료 희망일 :', '6. 기타 문의사항 :'],
+    etc: ['1. 문의 분야 :', '2. 제품 및 기술 정보 :', '3. 희망 진행 일정 :', '4. 세부 문의사항 :']
+  };
+  var typeSel = document.getElementById('inquiryType');
+  var msgBox = document.getElementById('inquiryMessage');
+  if (typeSel && msgBox) {
+    var guideText = function () {
+      var opt = typeSel.options[typeSel.selectedIndex];
+      var key = (opt && opt.getAttribute('data-guide')) || 'etc';
+      return GUIDES[key].join('\n');
+    };
+    var showGuide = function () { if (document.activeElement !== msgBox) msgBox.placeholder = guideText(); };
+    msgBox.addEventListener('focus', function () { msgBox.placeholder = ''; });
+    msgBox.addEventListener('blur', showGuide);
+    typeSel.addEventListener('change', showGuide);
+    showGuide();
+  }
+
+  // 약관 '모두 동의' ↔ 개별 동의 동기화
+  var agreeAll = document.querySelector('[data-agree-all]');
+  var agrees = document.querySelectorAll('[data-agree]');
+  if (agreeAll) {
+    var syncAll = function () {
+      agreeAll.checked = Array.prototype.every.call(agrees, function (c) { return c.checked; });
+    };
+    agreeAll.addEventListener('change', function () {
+      agrees.forEach(function (c) { c.checked = agreeAll.checked; });
+    });
+    agrees.forEach(function (c) { c.addEventListener('change', syncAll); });
+  }
+
   if (form) {
     var msg = form.querySelector('.form__msg');
     var MSG_REQUIRED = '필수 항목을 입력해 주세요.';

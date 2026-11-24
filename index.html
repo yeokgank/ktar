@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KTAR 한국시험평가원</title>
 <meta name="description" content="KTAR 한국시험평가원 – 시험·인증·고객지원 서비스 안내 및 견적 문의">
-<link rel="stylesheet" href="css/style.css?v=20261124">
+<link rel="stylesheet" href="css/style.css?v=20261124b">
 </head>
 <body id="top">
 
@@ -22,9 +22,9 @@
     <symbol id="i-quote" viewBox="0 0 48 48"><path d="M6 8h36v26H22l-9 8v-8H6z M15 18h18M15 25h11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-cloud" viewBox="0 0 48 48"><path d="M14 36a9 9 0 0 1-1-17.9A12 12 0 0 1 36 17a10 10 0 0 1 0 19z M20 28l4-4 4 4M24 24v10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-building" viewBox="0 0 48 48"><path d="M10 43V8h20v35M30 20h8v23M5 43h38M16 15h8M16 23h8M16 31h8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 7l9 6 9-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
     <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
-    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
     <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H10l-4 4v-4H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
     <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   </defs>
@@ -70,8 +70,6 @@
     </nav>
     <div class="util">
       <a href="#inquiry" class="util__quote">견적 문의</a>
-      <button type="button" aria-label="언어"><svg><use href="#i-globe"/></svg></button>
-      <button type="button" aria-label="검색"><svg><use href="#i-search"/></svg></button>
       <button type="button" aria-label="전체 메뉴" aria-expanded="false" aria-controls="gnb" data-nav-toggle><svg><use href="#i-menu"/></svg></button>
     </div>
   </div>
@@ -160,8 +158,15 @@
       <div class="inquiry__head">
         <h2>견적 문의</h2>
         <p>문의 내용을 남겨주시면 담당자가 확인 후 연락드리며, 시험항목 검토를 거쳐 영업일 기준 3일 이내 견적 안내를 진행합니다. 추가 기술검토가 필요한 경우 별도 안내드립니다.</p>
+        <div class="inquiry__contact">
+          <ul>
+            <li><svg aria-hidden="true"><use href="#i-phone"/></svg><a href="tel:02-6952-5077">02-6952-5077</a></li>
+            <li><svg aria-hidden="true"><use href="#i-mail"/></svg><a href="mailto:contact@ktar.kr">contact@ktar.kr</a></li>
+          </ul>
+          <p>한국시험평가원은 고객의 편리한 서비스 이용을 위해 항상 노력하겠습니다.</p>
+        </div>
       </div>
-      <form class="form" id="inquiryForm" action="#" method="post" novalidate>
+      <form class="form" id="inquiryForm" action="#" method="post" enctype="multipart/form-data" novalidate>
         <div class="form__row">
           <label>회사명 <i>*</i><input type="text" name="company" required></label>
           <label>담당자명 <i>*</i><input type="text" name="name" required></label>
@@ -171,16 +176,29 @@
           <label>이메일 <i>*</i><input type="email" name="email" required></label>
         </div>
         <label>문의 분야 <i>*</i>
-          <select name="type" required>
+          <select name="type" id="inquiryType" required>
             <option value="">선택해 주세요</option>
-            <option>공인시험</option><option>일반시험(V&amp;V)</option><option>GS인증</option><option>KC인증</option><option>클라우드 서비스</option><option>기타</option>
+            <option data-guide="certified">공인시험</option><option data-guide="vv">일반시험(V&amp;V)</option><option>GS인증</option><option data-guide="kc">KC인증</option><option>클라우드 서비스</option><option>기타</option>
           </select>
         </label>
-        <label>문의 내용 <i>*</i><textarea name="message" rows="5" required></textarea></label>
-        <label class="form__agree"><input type="checkbox" name="agree" required> 개인정보 수집 및 이용에 동의합니다.</label>
+        <div class="form__field">
+          <label for="inquiryMessage">문의 내용 <i>*</i></label>
+          <textarea name="message" id="inquiryMessage" rows="12" required></textarea>
+          <ul class="form__hint">
+            <li>※ 확인 가능한 항목만 작성해 주셔도 상담이 가능합니다.</li>
+            <li>※ 보안이 필요한 자료는 담당자와 상담 후 별도로 전달해 주시기 바랍니다.</li>
+          </ul>
+        </div>
+        <label>첨부파일<input type="file" name="files" multiple></label>
+        <fieldset class="form__agrees">
+          <legend class="sr-only">약관 동의</legend>
+          <label class="form__agree form__agree--all"><input type="checkbox" data-agree-all> 모두 동의</label>
+          <label class="form__agree"><input type="checkbox" name="agree" data-agree required> 개인정보수집 동의 <i>(필수)</i></label>
+          <label class="form__agree"><input type="checkbox" name="agree_marketing" value="Y" data-agree> 마케팅 활용 동의 <span>(선택)</span></label>
+        </fieldset>
         <p class="form__msg" role="status" aria-live="polite" hidden></p>
         <button type="submit" class="submit">견적 문의 접수</button>
-        <p class="form__note">시험계획서·성능지표 자료 등 기술자료는 최초 문의 단계에서 업로드하지 않아도 됩니다. 추가 자료가 필요한 경우 담당자가 개별 안내드립니다.</p>
+        <p class="form__note">문의 접수 후 담당자가 연락드리며, 시험 조건 및 필요 자료 확인 후 3영업일 이내 견적서를 발행해 드립니다.</p>
       </form>
     </div>
   </section>
@@ -208,7 +226,7 @@
   <a href="#top" class="float__b" aria-label="맨 위로"><svg><use href="#i-up"/></svg></a>
 </aside>
 
-<script src="js/main.js"></script>
-<script src="js/nav.js"></script>
+<script src="js/main.js?v=20261124b"></script>
+<script src="js/nav.js?v=20261124b"></script>
 </body>
 </html>

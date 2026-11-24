@@ -84,29 +84,43 @@
 .proc li.k .proc__no{background:var(--blue)}
 .proc b{display:block;margin-bottom:8px;font-size:18px;color:var(--navy)}
 .proc p{font-size:15px;line-height:1.75;color:#44526b}
-.who{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
-.who i{font-style:normal;padding:3px 10px;border-radius:6px;border:1px solid var(--line);background:#f5f8fc;font-size:12.5px;font-weight:700;color:#53627d}
-.who i.me{background:var(--blue);border-color:var(--blue);color:#fff}
+.proc li{display:flex;flex-direction:column}
+.proc__sub{display:block;margin-top:auto;padding-top:14px;font-size:13px;line-height:1.6;color:var(--muted)}
 .proc-ban{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:28px;padding:22px 28px;border-radius:12px;background:var(--navy);color:#fff}
 .proc-ban b{font-size:19px;line-height:1.5;letter-spacing:-.01em}
 .proc-ban em{font-style:normal;color:var(--sky)}
 .proc-ban a{flex:none;padding:12px 24px;background:var(--blue);color:#fff;font-weight:700;border-radius:10px}
 .proc-ban a:hover{background:var(--sky)}
 
-/* 준비 서류 */
-.docs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
-.docs__col{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.docs--one{grid-template-columns:minmax(0,1fr)}
-.docs__col h3{display:flex;align-items:center;justify-content:space-between;padding:18px 26px;font-size:18px;color:var(--navy);border-bottom:1px solid var(--line)}
-.docs__col h3 small{font-size:13px;font-weight:700;color:var(--muted)}
-.docs__col.me{border-color:var(--navy)}
-.docs__col.me h3{background:var(--navy);color:#fff;border-bottom-color:var(--navy)}
-.docs__col.me h3 small{color:var(--sky)}
-.docs__col li{display:flex;justify-content:space-between;gap:16px;padding:16px 26px;font-size:15.5px;color:#2c3750}
-.docs__col li+li{border-top:1px solid var(--line)}
-.docs__col li span{flex:none;color:var(--muted);font-size:14px}
-.docs__col--desc li{flex-direction:column;gap:4px}
-.docs__col--desc li span{flex:auto}
+/* 준비 서류: 왼쪽 제목·설명, 오른쪽 세로 카드 */
+.docs2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:56px;align-items:start}
+.docs2__head{position:sticky;top:calc(var(--header-h) + 88px)}
+.docs2__head h2{font-size:clamp(26px,3vw,36px);line-height:1.35;font-weight:800;letter-spacing:-.025em;color:var(--navy)}
+.docs2__head>p{margin-top:14px;font-size:17px;line-height:1.8;color:var(--muted)}
+.docs2__head .btn{margin-top:28px}
+.docs2__list{display:grid;gap:14px}
+.docs2__list li{display:flex;align-items:flex-start;gap:20px;padding:24px 28px;background:#fff;border:1px solid var(--line);border-radius:var(--radius-md);box-shadow:var(--shadow)}
+.docs2__no{display:grid;place-items:center;flex:none;width:38px;height:38px;border-radius:50%;background:var(--navy);color:#fff;font-size:15px;font-weight:800}
+.docs2__list b{display:block;font-size:17.5px;color:var(--navy)}
+.docs2__list li span:not(.docs2__no){display:block;margin-top:6px;font-size:15px;line-height:1.7;color:#44526b}
+
+/* 비교표: 일반시험·공인시험 열 구분 */
+.cmp--split th:nth-child(3),.cmp--split td:nth-child(3){border-left:2px solid var(--navy);background:#f2f8ff}
+.cmp--split thead th:nth-child(3){background:var(--navy);color:#fff}
+
+/* GS 필수 준비사항·점검항목 */
+.chk{margin-top:96px;padding-top:88px;border-top:1px solid var(--line);scroll-margin-top:calc(var(--header-h) + 56px)}
+.chk__stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-bottom:28px}
+.chk__stats>div{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:30px 34px;background:#fff;border:1px solid var(--line);border-top:3px solid var(--navy);border-radius:var(--radius-md);box-shadow:var(--shadow)}
+.chk__stats>div.is-key{border-top-color:var(--sky)}
+.chk__stats b{font-size:56px;line-height:1;font-weight:800;color:var(--navy);letter-spacing:-.02em}
+.chk__stats>div.is-key b{color:var(--blue)}
+.chk__stats b small{margin-left:4px;font-size:22px;font-weight:700}
+.chk__stats span{font-size:17px;font-weight:700;color:#44526b}
+.cmp--chk td:nth-child(2),.cmp--chk td:nth-child(3){text-align:center;white-space:nowrap}
+.cmp tr.is-sum th,.cmp tr.is-sum td{background:#e9f1fc;font-weight:800;color:var(--navy);border-top:2px solid var(--navy)}
+.chk__cta{margin:56px 0 0;padding:30px 34px}
+.chk__cta p{margin-top:8px;color:#c3d3ec;font-size:15.5px;line-height:1.7}
 .contact p.contact__note{font-size:14px;color:#9fb3d6}
 .docs-note{margin-top:16px;font-size:14px;color:var(--muted)}
 
@@ -129,7 +143,11 @@
   .cs{padding:64px 0}
 }
 @media (max-width:768px){
-  .gain,.proc,.docs{grid-template-columns:minmax(0,1fr)}
+  .gain,.proc,.docs2,.chk__stats{grid-template-columns:minmax(0,1fr)}
+  .docs2{gap:28px}
+  .docs2__head{position:static}
+  .chk{margin-top:64px;padding-top:56px}
+  .chk__stats b{font-size:44px}
   .atab__inner{flex-direction:column;gap:0}
   .atab__sw{padding:10px 0;border-top:1px solid var(--line);overflow-x:auto}
   .atab nav a{height:48px;padding:0 16px}
@@ -145,7 +163,7 @@
 .ph{background:#06142f url(../images/hero-poster.jpg) center/cover no-repeat}
 .btn{border-radius:999px}
 .gain li,.proc li{border-radius:var(--radius-md);border-top-width:1px;box-shadow:var(--shadow)}
-.cmp-wrap,.docs__col,.proc-ban,.contact__tel{border-radius:var(--radius-md)}
+.cmp-wrap,.proc-ban,.contact__tel{border-radius:var(--radius-md)}
 .proc-ban a{border-radius:999px}
 .proc__no{border-radius:12px}
 .atab__sw a{border-radius:999px}
