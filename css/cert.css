@@ -152,8 +152,8 @@
 
 /* ───── 페이지별 히어로 이미지 (홈페이지 이미지 반영) ───── */
 .ph{--ph-shade:linear-gradient(90deg,rgba(6,20,47,.88) 0%,rgba(6,20,47,.62) 55%,rgba(6,20,47,.45) 100%)}
-.ph--gs{background:var(--ph-shade),#06142f url(../images/sub/cert-gs.jpg) center/cover no-repeat}
-.ph--kc{background:var(--ph-shade),#06142f url(../images/sub/cert-kc.jpg) center/cover no-repeat}
-.ph--cloud{background:var(--ph-shade),#06142f url(../images/sub/cert-cloud.jpg) center/cover no-repeat}
-.ph--certified{background:var(--ph-shade),#06142f url(../images/sub/test-certified.jpg) center/cover no-repeat}
-.ph--vv{background:var(--ph-shade),#06142f url(../images/sub/test-vv.jpg) center/cover no-repeat}
+.ph--gs{background:var(--ph-shade),#06142f url(../images/sub/cert-gs.jpg?v=20261124) center/cover no-repeat}
+.ph--kc{background:var(--ph-shade),#06142f url(../images/sub/cert-kc.jpg?v=20261124) center/cover no-repeat}
+.ph--cloud{background:var(--ph-shade),#06142f url(../images/sub/cert-cloud.jpg?v=20261124) center/cover no-repeat}
+.ph--certified{background:var(--ph-shade),#06142f url(../images/sub/test-certified.jpg?v=20261124) center/cover no-repeat}
+.ph--vv{background:var(--ph-shade),#06142f url(../images/sub/test-vv.jpg?v=20261124) center/cover no-repeat}

@@ -274,7 +274,7 @@ svg{display:block}
 }
 
 /* ───── 견적 문의: 고객지원 이미지 ───── */
-.inquiry__tel{background:linear-gradient(rgba(11,33,80,.82),rgba(11,33,80,.82)),var(--navy) url(../images/sub/support.jpg) center/cover no-repeat}
+.inquiry__tel{background:linear-gradient(rgba(11,33,80,.82),rgba(11,33,80,.82)),var(--navy) url(../images/sub/support.jpg?v=20261124) center/cover no-repeat}
 
 /* ───── 메인 비주얼: 영상 대신 슬라이드별 이미지 (메인_이미지 1~4) ───── */
 .slide{--slide-shade:linear-gradient(90deg,rgba(4,16,42,.82) 0%,rgba(4,16,42,.5) 50%,rgba(4,16,42,.15) 100%);background:#04102a center/cover no-repeat}
@@ -288,7 +288,7 @@ svg{display:block}
 
 /* ───── 메인 섹션 은은한 배경 이미지 ───── */
 /* 기관 소개 요약(네이비): 회사 이미지를 흐리게 깔고 기존 원형 글로우는 그 위에 유지 */
-.about::after{content:"";position:absolute;inset:-20px;z-index:-2;background:url(../images/sub/about-intro.jpg) center/cover no-repeat;opacity:.22;filter:blur(3px) saturate(.8)}
+.about::after{content:"";position:absolute;inset:-20px;z-index:-2;background:url(../images/sub/about-intro.jpg?v=20261124) center/cover no-repeat;opacity:.22;filter:blur(3px) saturate(.8)}
 /* 견적 문의(밝은 배경): 고객지원 이미지를 아주 옅게 */
 .inquiry{position:relative;isolation:isolate;overflow:hidden}
 .inquiry::before{content:"";position:absolute;inset:-20px;z-index:-1;background:url(../images/main/inquiry.jpg?v=20261120) right center/cover no-repeat;opacity:.15;filter:blur(4px) grayscale(.3)}

@@ -175,8 +175,8 @@ def build(slug, repo):
     head = re.sub(r"<title>.*?</title>", f"<title>{t} | KTAR 한국시험평가원</title>", head)
     head = re.sub(r'<meta name="description" content=".*?">', f'<meta name="description" content="{plain(d["lead"])}">', head)
     head = head.replace('<li><a href="../cert/gs.html">', '<li class="is-current"><a href="../cert/gs.html">', 1)
-    head = head.replace('<link rel="stylesheet" href="../css/sub.css">',
-                        '<link rel="stylesheet" href="../css/sub.css">\n<link rel="stylesheet" href="../css/cert.css">')
+    head = head.replace('<link rel="stylesheet" href="../css/sub.css?v=20261124">',
+                        '<link rel="stylesheet" href="../css/sub.css?v=20261124">\n<link rel="stylesheet" href="../css/cert.css?v=20261124">')
 
     facts = "".join(f"<div><dt>{k}</dt><dd>{v}</dd></div>" for k, v in d["facts"])
     tabs = "".join(f'<a href="#{i}">{n}</a>' for i, n in ANCHORS)

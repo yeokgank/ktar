@@ -146,8 +146,8 @@ def head_for(slug):
     head = re.sub(r"<title>.*?</title>", f"<title>{esc(d['title'])} | KTAR 한국시험평가원</title>", HEAD)
     head = re.sub(r'<meta name="description" content=".*?">', f'<meta name="description" content="{esc(d.get("desc") or d["lead"])}">', head)
     head = head.replace('<li><a href="../test/certified.html">', '<li class="is-current"><a href="../test/certified.html">', 1)
-    return head.replace('<link rel="stylesheet" href="../css/sub.css">',
-                        '<link rel="stylesheet" href="../css/sub.css">\n<link rel="stylesheet" href="../css/cert.css">')
+    return head.replace('<link rel="stylesheet" href="../css/sub.css?v=20261124">',
+                        '<link rel="stylesheet" href="../css/sub.css?v=20261124">\n<link rel="stylesheet" href="../css/cert.css?v=20261124">')
 
 
 def cmp_table(d):
