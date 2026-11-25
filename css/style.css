@@ -395,3 +395,59 @@ svg{display:block}
   .form .agree label{font-size:14px}
   .legal__table tbody th{width:96px;white-space:normal}
 }
+
+/* ───── 줄바꿈: 단어 단위 + 의미 단위(전 페이지 공통) ─────
+   keep-all: 한글 단어가 중간에서 끊기지 않게. overflow-wrap: 긴 이메일·URL 은 넘치지 않게.
+   balance: 제목·카드 제목은 줄 길이를 고르게. pretty: 본문 마지막 줄에 한 단어만 남지 않게. */
+body{word-break:keep-all;overflow-wrap:break-word}
+h1,h2,h3,h4,.gain b,.proc b,.docs2__list b,.chk__cta b,.proc-ban b,.slide__sub,.qs__grid a,.agree__opt-head{text-wrap:balance}
+p,li,dd,td,th,.gain span,.docs2__list span,.ph__lead,.kh p,.cmp-note,.legal__notice{text-wrap:pretty}
+
+/* ───── 견적문의: 한 화면(노트북 높이 약 800px)에 폼 전체가 들어오도록 압축 ─────
+   왼쪽 입력 항목 · 오른쪽 문의 내용을 나란히 두고 간격·동의 영역을 줄인다. */
+.inquiry{padding:64px 0 72px}
+.inquiry__inner{grid-template-columns:minmax(0,.78fr) minmax(0,2fr);gap:40px}
+.inquiry h2{margin-bottom:12px}
+.inquiry__head>p{font-size:15.5px;line-height:1.7}
+.inquiry__contact{margin-top:22px;padding:18px 20px}
+.inquiry__contact li{font-size:17px}
+.form{padding:26px 30px 22px;gap:14px}
+.form__main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:18px}
+.form__fields{display:grid;gap:12px;align-content:start}
+.form__row{gap:12px}
+.form label,.form__field>label{gap:6px 4px;font-size:13px}
+.form input[type=text],.form input[type=tel],.form input[type=email],.form select{padding:10px 12px;border-radius:10px}
+.form input[type=file]{padding:7px 10px;font-size:13px}
+.form input[type=file]::file-selector-button{padding:6px 12px}
+.form__field{display:flex;flex-direction:column;gap:6px}
+.form textarea{flex:1;min-height:0;height:100%;padding:10px 12px;border-radius:10px;font-size:14px;line-height:1.6}
+.form__hint{font-size:12.5px;line-height:1.5}
+.agree{padding:2px 18px 10px}
+.agree__title{padding:10px 0 8px;font-size:14.5px}
+.agree__row{padding:7px 0}
+.agree__row--all{padding:8px 12px;margin-bottom:2px}
+.form .agree label{font-size:14px}
+.form .agree .agree__row--all span{font-size:14.5px}
+.agree__toggle{padding:8px 28px 8px 0;gap:1px}
+.agree__opt-head{font-size:14px}
+.agree__opt-sub{font-size:12.5px}
+.agree__note{margin-top:4px;font-size:12.5px}
+.submit{padding:14px;font-size:16px}
+.form__note{font-size:13px;line-height:1.5}
+@media (max-width:1100px){
+  .inquiry__inner{grid-template-columns:1fr;gap:28px}
+}
+@media (max-width:768px){
+  .form__main{grid-template-columns:minmax(0,1fr)}
+  .form textarea{height:auto;min-height:250px}
+}
+.form{padding:22px 28px 18px;gap:12px}
+.agree__title{padding:8px 0 6px}
+.agree__row{padding:6px 0}
+.submit{padding:12px}
+@media (max-width:768px){
+  .inquiry{padding:48px 0 56px}
+  .form{padding:20px 16px 16px}
+  .form .form__row{grid-template-columns:1fr 1fr;gap:10px}
+  .form textarea{min-height:220px}
+}

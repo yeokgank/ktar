@@ -39,6 +39,7 @@
 
   function open(article) {
     body.replaceChildren(document.importNode(article, true));
+    if (window.ktarTidyWrap) window.ktarTidyWrap(body);
     var title = body.querySelector('h1');
     if (title && title.id) dialog.setAttribute('aria-labelledby', title.id);
     document.documentElement.classList.add('is-modal-open');

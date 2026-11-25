@@ -175,3 +175,8 @@
 .ph--cloud{background:var(--ph-shade),#06142f url(../images/sub/cert-cloud.jpg?v=20261124) center/cover no-repeat}
 .ph--certified{background:var(--ph-shade),#06142f url(../images/sub/test-certified.jpg?v=20261124) center/cover no-repeat}
 .ph--vv{background:var(--ph-shade),#06142f url(../images/sub/test-vv.jpg?v=20261124) center/cover no-repeat}
+
+/* 표 안 강제 줄바꿈(<br>)은 넓은 화면용. 모바일에서는 칸이 좁아 오히려 한 단어만 남으므로 끈다 */
+@media (max-width:768px){
+  .cmp td br{display:none}
+}

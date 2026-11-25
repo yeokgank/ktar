@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KTAR 한국시험평가원</title>
 <meta name="description" content="KTAR 한국시험평가원 – 시험·인증·고객지원 서비스 안내 및 견적 문의">
-<link rel="stylesheet" href="css/style.css?v=20261125b">
+<link rel="stylesheet" href="css/style.css?v=20261125d">
 </head>
 <body id="top">
 
@@ -167,29 +167,33 @@
         </div>
       </div>
       <form class="form" id="inquiryForm" action="#" method="post" enctype="multipart/form-data" novalidate>
-        <div class="form__row">
-          <label>회사명 <i>*</i><input type="text" name="company" required></label>
-          <label>담당자명 <i>*</i><input type="text" name="name" required></label>
+        <div class="form__main">
+          <div class="form__fields">
+            <div class="form__row">
+              <label>회사명 <i>*</i><input type="text" name="company" required></label>
+              <label>담당자명 <i>*</i><input type="text" name="name" required></label>
+            </div>
+            <div class="form__row">
+              <label>연락처 <i>*</i><input type="tel" name="tel" placeholder="010-0000-0000" required></label>
+              <label>이메일 <i>*</i><input type="email" name="email" required></label>
+            </div>
+            <label>문의 분야 <i>*</i>
+              <select name="type" id="inquiryType" required>
+                <option value="">선택해 주세요</option>
+                <option data-guide="certified">공인시험</option><option data-guide="vv">일반시험(V&amp;V)</option><option>GS인증</option><option data-guide="kc">KC인증</option><option>클라우드서비스</option><option>기타</option>
+              </select>
+            </label>
+            <label>첨부파일<input type="file" name="files" multiple></label>
+          </div>
+          <div class="form__field">
+            <label for="inquiryMessage">문의 내용 <i>*</i></label>
+            <textarea name="message" id="inquiryMessage" rows="8" required></textarea>
+            <ul class="form__hint">
+              <li>※ 확인 가능한 항목만 작성해 주셔도 상담이 가능합니다.</li>
+              <li>※ 보안이 필요한 자료는 담당자와 상담 후 별도로 전달해 주시기 바랍니다.</li>
+            </ul>
+          </div>
         </div>
-        <div class="form__row">
-          <label>연락처 <i>*</i><input type="tel" name="tel" placeholder="010-0000-0000" required></label>
-          <label>이메일 <i>*</i><input type="email" name="email" required></label>
-        </div>
-        <label>문의 분야 <i>*</i>
-          <select name="type" id="inquiryType" required>
-            <option value="">선택해 주세요</option>
-            <option data-guide="certified">공인시험</option><option data-guide="vv">일반시험(V&amp;V)</option><option>GS인증</option><option data-guide="kc">KC인증</option><option>클라우드 서비스</option><option>기타</option>
-          </select>
-        </label>
-        <div class="form__field">
-          <label for="inquiryMessage">문의 내용 <i>*</i></label>
-          <textarea name="message" id="inquiryMessage" rows="12" required></textarea>
-          <ul class="form__hint">
-            <li>※ 확인 가능한 항목만 작성해 주셔도 상담이 가능합니다.</li>
-            <li>※ 보안이 필요한 자료는 담당자와 상담 후 별도로 전달해 주시기 바랍니다.</li>
-          </ul>
-        </div>
-        <label>첨부파일<input type="file" name="files" multiple></label>
         <fieldset class="agree" id="agreeBox">
           <legend class="agree__title">약관 및 개인정보 동의</legend>
           <label class="agree__row agree__row--all"><input type="checkbox" data-agree-all><span>전체 동의</span><small>선택 항목 포함</small></label>
@@ -252,6 +256,7 @@
 
 <script src="js/main.js?v=20261125b"></script>
 <script src="js/nav.js?v=20261124b"></script>
-<script src="js/legal.js?v=20261125b"></script>
+<script src="js/wrap.js?v=20261125c"></script>
+<script src="js/legal.js?v=20261125c"></script>
 </body>
 </html>
