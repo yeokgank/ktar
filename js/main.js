@@ -38,8 +38,8 @@
   // 접수 저장·담당자 전달 엔드포인트는 form[data-endpoint] 로 지정한다(미지정 시 전송하지 않음).
   var form = document.getElementById('inquiryForm');
 
-  // 문의 내용 안내 양식: 문의 분야에 따라 placeholder 교체(참고용, 필수 아님).
-  // 입력란에 들어가면 숨기고, 비운 채로 나가면 다시 보인다. 분야를 바꿔도 작성 내용은 유지된다.
+  // 문의 내용 작성 양식: 문의 분야를 고르면 입력란에 양식 텍스트를 넣는다(참고용, 항목별 필수 아님).
+  // 고객이 내용을 작성한 뒤 분야를 바꾸면 작성 내용을 그대로 둔다.
   var GUIDES = {
     certified: ['1. 정부 R&D 과제명 :', '2. 시험 대상 제품 및 기술 :', '3. 과제 종료일 :', '4. 정량적 목표항목 및 목표치 :',
       '5. 시험 장비 보유 여부 (교정 여부 포함) :', '6. 성적서 발급 희망일 :', '7. 기타 문의사항 :'],
@@ -52,16 +52,21 @@
   var typeSel = document.getElementById('inquiryType');
   var msgBox = document.getElementById('inquiryMessage');
   if (typeSel && msgBox) {
-    var guideText = function () {
-      var opt = typeSel.options[typeSel.selectedIndex];
-      var key = (opt && opt.getAttribute('data-guide')) || 'etc';
-      return GUIDES[key].join('\n');
+    var templates = Object.keys(GUIDES).map(function (k) { return GUIDES[k].join('\n'); });
+    // 비어 있거나 양식을 손대지 않은 상태일 때만 교체한다(작성한 내용은 덮어쓰지 않음).
+    var isUntouched = function () {
+      var v = msgBox.value.trim();
+      return v === '' || templates.indexOf(v) !== -1;
     };
-    var showGuide = function () { if (document.activeElement !== msgBox) msgBox.placeholder = guideText(); };
-    msgBox.addEventListener('focus', function () { msgBox.placeholder = ''; });
-    msgBox.addEventListener('blur', showGuide);
-    typeSel.addEventListener('change', showGuide);
-    showGuide();
+    var fillGuide = function () {
+      if (!isUntouched()) return;
+      var opt = typeSel.options[typeSel.selectedIndex];
+      if (!opt || !opt.value) { msgBox.value = ''; return; }
+      msgBox.value = GUIDES[opt.getAttribute('data-guide') || 'etc'].join('\n');
+    };
+    msgBox.placeholder = '문의 분야를 선택하시면 작성 양식이 자동으로 입력됩니다.';
+    typeSel.addEventListener('change', fillGuide);
+    fillGuide();
   }
 
   // 약관 '모두 동의' ↔ 개별 동의 동기화
