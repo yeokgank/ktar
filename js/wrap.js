@@ -8,12 +8,15 @@
    약관 본문(.legal)은 긴 줄글이라 2)를 적용하지 않는다. */
 (function () {
   var NB = '\u00A0';
-  // 꾸밈말 묶음은 '약한 묶음'(WEAK)으로 표시했다가, 묶음이 MAX_CHUNK 자를 넘으면 앞에서부터 푼다.
+  // 꾸밈말 묶음은 약한 묶음(WEAK)·느슨한 묶음(LOOSE_MARK)으로 표시했다가, 덩어리가 MAX_CHUNK 자를 넘으면 푼다.
   // 연달아 묶여 한 덩어리가 너무 길어지면 앞줄에 큰 빈칸이 생기기 때문이다.
   var WEAK = '\uE000';
+  var LOOSE_MARK = '\uE001';
   var MAX_CHUNK = 16;
   // 뒤 명사를 꾸미는 말(이 단어 다음에서는 줄을 바꾸지 않는다)
-  var MODIFIERS = '필수|희망|주요|관련|기존|신규|해당|별도|각종|최종|공식|정부|국내|해외|사전|추가|개별|공인|국가|지정|협력|전문|맞춤|정량적|정성적|체계적인|객관적인|공식적인|다양한|원활한|필요한|정확한|대한|위한|통한|관한|따른|의한';
+  var MODIFIERS = '필수|희망|주요|관련|기존|신규|해당|별도|각종|최종|공식|정부|국내|해외|사전|추가|개별|공인|국가|지정|협력|전문|맞춤|정량적|정성적|체계적인|객관적인|공식적인|다양한|원활한|필요한|정확한';
+  // 연결이 느슨한 꾸밈말(긴 덩어리를 풀 때 가장 먼저 푼다)
+  var LOOSE = '대한|위한|통한|관한|따른|의한';
   // 관형형 어미(~하는/~되는/~된 …)로 끝나는 어절
   var ADNOMINAL = '[가-힣]+(?:하는|되는|있는|없는|받는|하던|한|된|할|될)';
   // 띄어 쓰지만 한 낱말처럼 읽히는 이 사이트의 복합명사
@@ -34,10 +37,11 @@
     [/(에|와|과|에게) (대한|대해|따라|따른|관한|관해|의한|의해|비해|맞춰|맞게|걸쳐|앞서)(?=[\s.,]|$)/g, '$1' + NB + '$2'],
     // 꾸미는 말 + 꾸밈 받는 말
     // 앞 공백을 소비하지 않아야(?<=) "대한 체계적인 사전점검"처럼 연달아 오는 꾸밈말도 모두 묶인다.
-    [new RegExp('(?<=^|[\\s(' + WEAK + '])(' + MODIFIERS + ') (?=[가-힣A-Za-z0-9])', 'g'), '$1' + WEAK],
-    [new RegExp('(?<=^|[\\s(' + WEAK + '])(' + ADNOMINAL + ') (?=[가-힣A-Za-z0-9])', 'g'), '$1' + WEAK],
+    [new RegExp('(?<=^|[\\s(\\u00A0' + WEAK + LOOSE_MARK + '])(' + LOOSE + ') (?=[가-힣A-Za-z0-9])', 'g'), '$1' + LOOSE_MARK],
+    [new RegExp('(?<=^|[\\s(\\u00A0' + WEAK + LOOSE_MARK + '])(' + MODIFIERS + ') (?=[가-힣A-Za-z0-9])', 'g'), '$1' + WEAK],
+    [new RegExp('(?<=^|[\\s(\\u00A0' + WEAK + LOOSE_MARK + '])(' + ADNOMINAL + ') (?=[가-힣A-Za-z0-9])', 'g'), '$1' + WEAK],
     // "클라우드서비스의 적합성", "시험기관과의 협업"
-    [new RegExp('([^\\s\\u00A0' + WEAK + ']+의) (?=[가-힣A-Za-z0-9])', 'g'), '$1' + WEAK],
+    [new RegExp('([^\\s\\u00A0' + WEAK + LOOSE_MARK + ']+의) (?=[가-힣A-Za-z0-9])', 'g'), '$1' + LOOSE_MARK],
     // 괄호 뒤 조사가 다음 줄로 떨어지지 않게: "협회(KACI)의"
     [/\)(?=[가-힣])/g, ')\u2060'],
     [/All rights reserved/g, 'All' + NB + 'rights' + NB + 'reserved']
@@ -46,21 +50,21 @@
   // 문장 끝(마침표 등) 뒤 공백. "1. 항목" 같은 번호는 앞이 숫자라 제외한다.
   var SENTENCE_END = /([^\d\s][.!?])\s+(?=\S)/g;
 
-  // 약한 묶음을 앞에서부터 하나씩 풀어, 남은 덩어리가 MAX_CHUNK 자 이하가 되게 한다.
-  // 예) "명시된◇정량적◇목표의◇달성·여부를"(18자) → "명시된 정량적·목표의·달성·여부를"
+  // 덩어리가 MAX_CHUNK 자를 넘으면 느슨한 연결('~의', '~에 대한')부터, 없으면 약한 연결을 뒤에서부터 푼다.
+  // 예) "명시된◇정량적◇목표의◆달성·여부를"(18자) → "명시된 정량적 목표의 / 달성 여부를"
+  //     "기능에·대한◆체계적인◇사전점검이"(17자) → "기능에 대한 / 체계적인 사전점검이"
   function limitChunk(chunk) {
-    var parts = chunk.split(WEAK);
-    var i = 0;
-    while (parts.length - i > 1 && parts.slice(i).join(NB).length > MAX_CHUNK) i++;
-    return parts.slice(0, i).concat([parts.slice(i).join(NB)]).join(' ');
+    if (chunk.length <= MAX_CHUNK) return chunk.split(WEAK).join(NB).split(LOOSE_MARK).join(NB);
+    var at = chunk.lastIndexOf(LOOSE_MARK);
+    if (at === -1) at = chunk.lastIndexOf(WEAK);
+    if (at === -1) return chunk;
+    return limitChunk(chunk.slice(0, at)) + ' ' + limitChunk(chunk.slice(at + 1));
   }
 
   function bindWords(text) {
     var bound = RULES.reduce(function (t, r) { return t.replace(r[0], r[1]); }, text);
-    if (bound.indexOf(WEAK) === -1) return bound;
-    return bound.split(' ').map(function (c) {
-      return c.indexOf(WEAK) === -1 || c.length <= MAX_CHUNK ? c.split(WEAK).join(NB) : limitChunk(c);
-    }).join(' ');
+    if (bound.indexOf(WEAK) === -1 && bound.indexOf(LOOSE_MARK) === -1) return bound;
+    return bound.split(' ').map(limitChunk).join(' ');
   }
 
   function splitSentences(node) {
@@ -102,7 +106,7 @@
   // 예) "신청 준비부터 심사 대응까지 / 지원합니다" → "신청 준비부터 / 심사 대응까지 지원합니다"
   // 제목은 항상, 표 칸·강조문 같은 짧은 문구(SHORT_MAX자 이하)는 길이를 보고 적용한다.
   var HEADINGS = 'h1, h2, h3, h4';
-  var SHORT = 'th, td, dt, dd, b, strong, li';
+  var SHORT = 'th, td, dt, dd, b, strong, li, label';
   var SHORT_MAX = 30;
   function bindHeadingEnd(root) {
     var sel = HEADINGS + ', ' + SHORT;
