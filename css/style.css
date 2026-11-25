@@ -451,3 +451,8 @@ p,li,dd,td,th,.gain span,.docs2__list span,.ph__lead,.kh p,.cmp-note,.legal__not
   .form .form__row{grid-template-columns:1fr 1fr;gap:10px}
   .form textarea{min-height:220px}
 }
+
+/* 문장 단위 줄바꿈(js/wrap.js): 다음 문장이 남은 자리에 통째로 안 들어가면 새 줄에서 시작 */
+.wrap-sen{display:inline-block;max-width:100%}
+/* 표 안의 바로가기 링크("인증 서비스 보기")는 한 줄로 */
+.tbl td a{white-space:nowrap}
