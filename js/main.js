@@ -69,18 +69,40 @@
     fillGuide();
   }
 
-  // 약관 '모두 동의' ↔ 개별 동의 동기화
+  // 약관 동의: 각 항목은 독립 선택(기본 미선택). '전체 동의'는 선택 항목까지 포함하며,
+  // 체크하면 선택 동의 내용을 먼저 확인할 수 있도록 선택 영역을 펼친다. 필수 2개만 동의해도 접수 가능.
   var agreeAll = document.querySelector('[data-agree-all]');
   var agrees = document.querySelectorAll('[data-agree]');
+  var optAgrees = document.querySelectorAll('[data-agree-opt]');
+  var optToggle = document.querySelector('.agree__toggle');
+  var optBody = document.getElementById('agreeOpt');
+  var optCount = document.querySelector('[data-agree-count]');
+  var optLabel = document.querySelector('[data-agree-toggle-label]');
+  var setOptOpen = function (open) {
+    if (!optToggle || !optBody) return;
+    optBody.hidden = !open;
+    optToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (optLabel) optLabel.textContent = open ? '접기' : '펼치기';
+  };
+  var syncAgrees = function () {
+    if (agreeAll) agreeAll.checked = Array.prototype.every.call(agrees, function (c) { return c.checked; });
+    if (optCount) {
+      var n = Array.prototype.filter.call(optAgrees, function (c) { return c.checked; }).length;
+      optCount.textContent = '(' + n + '/' + optAgrees.length + ')';
+    }
+  };
   if (agreeAll) {
-    var syncAll = function () {
-      agreeAll.checked = Array.prototype.every.call(agrees, function (c) { return c.checked; });
-    };
     agreeAll.addEventListener('change', function () {
       agrees.forEach(function (c) { c.checked = agreeAll.checked; });
+      if (agreeAll.checked) setOptOpen(true);
+      syncAgrees();
     });
-    agrees.forEach(function (c) { c.addEventListener('change', syncAll); });
+    agrees.forEach(function (c) { c.addEventListener('change', syncAgrees); });
   }
+  if (optToggle) {
+    optToggle.addEventListener('click', function () { setOptOpen(optBody.hidden); });
+  }
+  if (form) form.addEventListener('reset', function () { setTimeout(syncAgrees, 0); });
 
   if (form) {
     var msg = form.querySelector('.form__msg');
