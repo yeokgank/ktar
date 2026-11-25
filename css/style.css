@@ -365,23 +365,12 @@ svg{display:block}
 .agree__row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
 .form .agree label{display:flex;flex-wrap:nowrap;align-items:center;gap:10px;font-weight:500;font-size:15px;color:var(--text);cursor:pointer}
 .form .agree label>input{flex:none;width:20px;height:20px;margin:0;accent-color:var(--navy)}
-.agree__row--all{border-top:0;padding:14px 16px;margin-bottom:6px;border-radius:10px;background:#eaf1fb}
+.agree__row--all{justify-content:flex-start;border-top:0;padding:14px 16px;margin-bottom:6px;border-radius:10px;background:#eaf1fb}
 .form .agree .agree__row--all span{font-weight:800;color:var(--navy);font-size:16px}
-.agree__row--all small{margin-left:auto;font-size:13px;color:var(--muted);font-weight:500}
 .agree__req{font-style:normal;font-weight:800;color:#d93025}
 .agree__sel{font-style:normal;font-weight:800;color:var(--blue)}
 .agree__view{flex:none;font-size:13.5px;font-weight:700;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
 .agree__view:hover,.agree__view:focus-visible{color:var(--blue)}
-.agree__opt{border-top:1px solid var(--line)}
-.agree__toggle{position:relative;display:grid;gap:3px;width:100%;padding:13px 32px 13px 0;text-align:left;font:inherit;color:var(--text)}
-.agree__opt-head{font-size:15px;font-weight:600}
-.agree__opt-head b{margin-left:4px;color:var(--blue);font-weight:800}
-.agree__opt-sub{font-size:13.5px;color:var(--muted)}
-.agree__chev{position:absolute;right:6px;top:50%;width:10px;height:10px;margin-top:-7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s}
-.agree__toggle[aria-expanded="true"] .agree__chev{transform:rotate(-135deg);margin-top:-2px}
-.agree__toggle:hover .agree__opt-head,.agree__toggle:focus-visible .agree__opt-head{color:var(--blue)}
-.agree__opt-body{margin:0 0 4px;padding:2px 14px;border-radius:10px;background:#fff;border:1px solid var(--line)}
-.agree__opt-body .agree__row:first-child{border-top:0}
 .agree__note{margin-top:10px;font-size:13.5px;color:var(--muted)}
 .legal__table{width:100%;margin:16px 0;border-collapse:collapse;border-top:2px solid var(--navy);font-size:14.5px}
 .legal__table th,.legal__table td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
@@ -400,7 +389,7 @@ svg{display:block}
    keep-all: 한글 단어가 중간에서 끊기지 않게. overflow-wrap: 긴 이메일·URL 은 넘치지 않게.
    balance: 제목·카드 제목은 줄 길이를 고르게. pretty: 본문 마지막 줄에 한 단어만 남지 않게. */
 body{word-break:keep-all;overflow-wrap:break-word}
-h1,h2,h3,h4,.gain b,.proc b,.docs2__list b,.chk__cta b,.proc-ban b,.slide__sub,.qs__grid a,.agree__opt-head{text-wrap:balance}
+h1,h2,h3,h4,.gain b,.proc b,.docs2__list b,.chk__cta b,.proc-ban b,.slide__sub,.qs__grid a{text-wrap:balance}
 p,li,dd,td,th,.gain span,.docs2__list span,.ph__lead,.kh p,.cmp-note,.legal__notice{text-wrap:pretty}
 
 /* ───── 견적문의: 한 화면(노트북 높이 약 800px)에 폼 전체가 들어오도록 압축 ─────
@@ -428,9 +417,6 @@ p,li,dd,td,th,.gain span,.docs2__list span,.ph__lead,.kh p,.cmp-note,.legal__not
 .agree__row--all{padding:8px 12px;margin-bottom:2px}
 .form .agree label{font-size:14px}
 .form .agree .agree__row--all span{font-size:14.5px}
-.agree__toggle{padding:8px 28px 8px 0;gap:1px}
-.agree__opt-head{font-size:14px}
-.agree__opt-sub{font-size:12.5px}
 .agree__note{margin-top:4px;font-size:12.5px}
 .submit{padding:14px;font-size:16px}
 .form__note{font-size:13px;line-height:1.5}
