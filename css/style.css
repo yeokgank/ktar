@@ -202,8 +202,11 @@ svg{display:block}
 .footer__links b{color:#fff}
 .footer__body{display:flex;align-items:center;gap:40px;padding-top:34px}
 .footer__logo{height:52px;width:auto;opacity:.9}
-.footer address{font-style:normal;display:grid;gap:4px}
-.footer__copy{margin-top:8px;opacity:.6}
+.footer address{font-style:normal;display:grid;gap:4px;line-height:1.7}
+.footer__name{margin-bottom:4px;font-size:15px;font-weight:700;color:#fff}
+.footer__info span+span::before{content:"|";margin:0 12px;opacity:.4}
+.footer__info a:hover{color:#fff}
+.footer__copy{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.1);opacity:.6}
 
 /* ───── responsive ───── */
 @media (max-width:1399px){
@@ -263,6 +266,8 @@ svg{display:block}
   .float{right:14px;bottom:14px}.float a{width:52px;height:52px}
   .footer__body{flex-direction:column;align-items:flex-start;gap:16px}
   .footer__links{flex-wrap:wrap;gap:14px 22px}
+  .footer__info span{display:block}
+  .footer__info span+span::before{content:none}
 }
 /* 좁은 폰(≤420px): 큰 아이콘 + 메뉴명이 2열에 들어가지 않아 1열 */
 @media (max-width:420px){
@@ -312,6 +317,9 @@ svg{display:block}
 .inquiry__contact svg{flex:none;width:22px;height:22px;color:var(--blue)}
 .inquiry__contact a:hover{color:var(--blue)}
 .inquiry__contact p{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:15px;color:var(--muted);word-break:keep-all}
+.inquiry__hours{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:15px;color:var(--muted)}
+.inquiry__hours dt{font-weight:700;color:var(--navy)}
+.inquiry__hours dd+dd::before{content:"·";margin-right:14px;opacity:.6}
 .form__field{display:grid;gap:8px}
 .form__field>label{font-weight:700;font-size:14px}
 .form__field>label i{color:#d93025;font-style:normal}

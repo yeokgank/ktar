@@ -137,3 +137,25 @@ body.sub{padding-top:var(--header-h)}
 .sub-hero{--sh-shade:linear-gradient(rgba(6,20,47,.66),rgba(6,20,47,.66))}
 .sub-hero--intro{background:var(--sh-shade),#06142f url(../images/sub/about-intro.jpg?v=20261124) center/cover no-repeat}
 .sub-hero--location{background:var(--sh-shade),#06142f url(../images/sub/about-location.jpg?v=20261124) center/cover no-repeat}
+
+/* 기관 소개: 경영이념 카드 (Figma 11-25 #93) */
+.ideo{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.ideo li{padding:28px 26px;background:#fff;border:1px solid var(--line);border-top:3px solid var(--navy);border-radius:var(--radius-md);box-shadow:var(--shadow)}
+.ideo small{display:block;font-size:13px;font-weight:800;letter-spacing:.1em;color:var(--blue)}
+.ideo b{display:block;margin:6px 0 12px;font-size:20px;color:var(--navy)}
+.ideo p{font-size:15.5px;line-height:1.75;color:#44526b;word-break:keep-all}
+.greet .text p+p{margin-top:12px}
+
+/* 오시는 길: 지도 버튼·방문 안내 (Figma 11-25 #91) */
+.map__btns{display:flex;gap:10px;margin-top:14px}
+.map__btn{display:inline-flex;align-items:center;height:44px;padding:0 20px;border-radius:999px;font-size:15px;font-weight:700;color:#fff}
+.map__btn--naver{background:#03a94d}
+.map__btn--kakao{background:#fee500;color:#191919}
+.map__btn:hover{opacity:.9}
+.chk-list{display:grid;gap:10px}
+.chk-list li{position:relative;padding-left:30px;font-size:16px;line-height:1.7;color:var(--text)}
+.chk-list li::before{content:"";position:absolute;left:2px;top:5px;width:18px;height:18px;border-radius:50%;background:var(--blue) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.3l2.6 2.5L12 5.4' fill='none' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E") center/12px no-repeat}
+@media (max-width:768px){
+  .ideo{grid-template-columns:minmax(0,1fr)}
+  .map__btns{flex-wrap:wrap}
+}

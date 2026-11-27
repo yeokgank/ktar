@@ -169,33 +169,48 @@ PAGES["cert/cloud"] = dict(
 
 # ── 소개 ─────────────────────────────────────────────
 PAGES["about/intro"] = dict(
-    title="기관 소개", lead="시험기관과 기업을 연결하는 시험평가 기술 서비스 기관입니다.",
+    title="기관 소개", lead="시험평가 및 인증 전문 기술 서비스 기업입니다.",
     body=
+    # Figma 11-25 #93
     sec("인사말", '<div class="greet greet--solo"><div class="text">'
-        "<strong>시험평가의 준비부터 결과서 발급 절차까지 함께합니다.</strong>"
-        "<p>KTAR 한국시험평가원을 찾아주셔서 감사합니다. KTAR은 기업의 기술개발 성과와 제품·서비스 성능 검증을 위해 "
-        "시험기관 연계, 시험항목 검토 지원, 일정 조율 및 결과서 발급 절차를 지원하는 기술 서비스 기관입니다. "
-        "기업이 시험평가 업무를 보다 체계적으로 진행할 수 있도록 협력기관과 긴밀히 소통하겠습니다.</p>"
+        "<strong>기업의 기술에 객관적인 근거를 더하고,<br>신뢰할 수 있는 가치를 만들어갑니다.</strong>"
+        "<p>KTAR 한국시험평가원을 찾아주셔서 감사합니다.</p>"
+        "<p>KTAR는 기업의 연구개발 성과와 제품의 기술적 가치를 객관적으로 입증하기 위한 시험평가 및 인증 전문 기술 서비스 기업입니다.</p>"
+        "<p>정부 R&amp;D 과제의 정량적 목표 검증부터 제품·서비스의 성능평가 및 인증까지, "
+        "기업별 요구사항에 적합한 기술 검토와 체계적인 진행 관리를 제공합니다.</p>"
+        "<p>전문성과 책임을 바탕으로 기업의 기술 경쟁력 확보와 지속적인 성장에 기여하는 신뢰받는 기술 서비스 파트너가 되겠습니다.</p>"
         '<p class="sign"><b>KTAR 한국시험평가원</b></p></div></div>')
-    + sec("미션과 비전", tbl(None, [
-        ("미션", "기업의 기술 검증이 원활히 진행되도록 시험기관과의 협업을 지원합니다."),
-        ("비전", "시험평가 업무를 믿고 맡길 수 있는 기술 서비스 파트너"),
-        ("핵심 가치", "전문성 · 신뢰 · 책임 있는 진행 관리")]))
-    + sec("주요 사업", tbl(["구분", "설명", "바로가기"], [
-        ("공인시험 연계", "공인시험기관의 인정범위에 맞는 시험기관 연계 및 절차 지원", '<a href="../test/certified.html">공인시험 보기</a>'),
-        ("일반시험 지원", "정량지표·특수 항목 검토 및 협력 시험기관 연계", '<a href="../test/vv.html">일반시험 보기</a>'),
-        ("인증 절차 지원", "GS·KC 등 인증 관련 요건 검토 및 기관 연계", '<a href="../cert/gs.html">인증 서비스 보기</a>'),
-        ("견적 및 진행 관리", "시험·인증 관련 문의 접수, 견적 및 일정 협의", '<a href="../index.html#inquiry">견적 문의</a>')], centers=(2,))))
-    # 연혁·조직 및 업무: 실제 정보 확정 전까지 섹션 비노출 (작업지시서 5)
+    + sec("경영이념", '<ul class="ideo">'
+        '<li><small>MISSION</small><b>미션</b><p>객관적인 기술 검증을 통해 기업의 기술적 가치와 신뢰성 향상에 기여</p></li>'
+        '<li><small>VISION</small><b>비전</b><p>기업의 연구개발과 사업화를 함께하는 신뢰받는 시험평가 기술 서비스 기업</p></li>'
+        '<li><small>CORE VALUES</small><b>핵심가치</b><p>전문성 · 신뢰 · 책임</p></li>'
+        '</ul>')
+    + sec("주요 사업", tbl(["구분", "주요 서비스", "바로가기"], [
+        ("공인시험", "KOLAS 인정범위에 따른 시험 검토 및 진행 관리", '<a href="../test/certified.html">공인시험 보기</a>'),
+        ("일반시험", "정량적 목표, 제품·서비스 성능 및 특수 시험항목 검증", '<a href="../test/vv.html">일반시험 보기</a>'),
+        ("GS인증", "소프트웨어 품질인증 요건 검토 및 평가 대응", '<a href="../cert/gs.html">GS인증 보기</a>'),
+        ("KC인증", "제품별 안전관리 및 적합성평가 요건 검토", '<a href="../cert/kc.html">KC인증 보기</a>'),
+        ("클라우드서비스 확인제", "서비스 적합성 검토 및 확인제 평가 대응", '<a href="../cert/cloud.html">확인제 보기</a>')], centers=(2,))))
+
+ADDRESS = "경기도 고양시 덕양구 향동로 128, 스타비즈4st 1120호"
+MAP_Q = "%EA%B2%BD%EA%B8%B0%EB%8F%84%20%EA%B3%A0%EC%96%91%EC%8B%9C%20%EB%8D%95%EC%96%91%EA%B5%AC%20%ED%96%A5%EB%8F%99%EB%A1%9C%20128"  # 지도 검색어는 호수 없이 도로명주소까지
 
 PAGES["about/location"] = dict(
     title="오시는 길", lead="KTAR 한국시험평가원을 찾아오시는 방법을 안내합니다.",
     body=
-    sec("위치", '<div class="map" role="img" aria-label="위치 안내 지도(시안)"><div class="map__pin"><svg><use href="#i-map"/></svg><span>KTAR 한국시험평가원</span></div><span class="map__note">※ 지도 영역 (실제 지도 연동 예정)</span></div>')
-    # 주소·전화·팩스·이메일·교통 안내: 실제 정보 확정 전까지 비노출 (작업지시서 7. 임시 정보 처리)
-    + sec("연락처", tbl(None, [
-        ("근무시간", "평일 09:00 – 18:00 (주말·공휴일 휴무)")]))
-    + sec("방문 안내", note(["방문 전 담당자에게 일시와 목적을 알려 주시면 원활히 안내해 드립니다.", "시료를 직접 가져오시는 경우 접수 방법을 먼저 문의해 주세요."], title="안내")))
+    # Figma 11-25 #91
+    sec("위치 안내", '<div class="map" role="img" aria-label="KTAR 한국시험평가원 위치"><div class="map__pin"><svg><use href="#i-map"/></svg><span>KTAR 한국시험평가원</span></div><span class="map__note">실제 지도 연동 영역</span></div>'
+        '<div class="map__btns">'
+        f'<a class="map__btn map__btn--naver" href="https://map.naver.com/p/search/{MAP_Q}" target="_blank" rel="noopener">네이버 지도 보기</a>'
+        f'<a class="map__btn map__btn--kakao" href="https://map.kakao.com/?q={MAP_Q}" target="_blank" rel="noopener">카카오맵 보기</a>'
+        '</div>')
+    + sec("주소 및 연락처", tbl(None, [
+        ("주소", ADDRESS),
+        ("대표전화", '<a href="tel:02-6952-5077">02-6952-5077</a>'),
+        ("운영시간", "평일 09:00 ~ 18:00 (주말·공휴일 휴무)")]))
+    + sec("방문 안내", '<ul class="chk-list">'
+        "<li>원활한 상담을 위해 방문 전 담당자와 일정을 협의해 주세요.</li>"
+        "<li>시험용 시료를 직접 전달하시는 경우 사전에 접수 방법을 확인해 주세요.</li></ul>"))
 
 
 def build(key, g_key, page_no):
